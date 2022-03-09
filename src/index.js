@@ -1,6 +1,6 @@
-import React from 'react'
-import styles from './styles.module.css'
+import { ExampleComponent } from "./Components/WalletButton";
+import {UserContext, UserInfoProvider} from './State/Provider'
 
-export const ExampleComponent = ({ text }) => {
-  return <div className={styles.test}>Example Component: {text}</div>
-}
+export default ExampleComponent;
+export const WalletProvider = UserInfoProvider;
+export const WalletContext = UserContext;
