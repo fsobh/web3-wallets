@@ -34,7 +34,7 @@ const getWeb3 = () =>
    
 });
 
-async function listenMMAccount(Ethereum) {
+async function listenMMAccount(Ethereum, set) {
 
     window.ethereum.on('accountsChanged', async function (accounts) {
       console.log(accounts);
@@ -70,19 +70,9 @@ async function listenMMAccount(Ethereum) {
     });
 }
 
-export default async function connectMetaMask(disconnect = false) {
+export default async function connectMetaMask(current,set) {
     try {
 
-      if(disconnect && props.authenticated)
-        return toast.info('Disconnected using Meta mask ', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          });
 
 
       const Ethereum = await getWeb3();
@@ -92,11 +82,21 @@ export default async function connectMetaMask(disconnect = false) {
         const addy = await Ethereum.eth.getAccounts();
         const network = await Ethereum.eth.getChainId();
         let auth = true;
+
+        //TODO : FIX
         if (network !== getAllowedNetwork()) auth = false;
         //add check here for chain
 
-        props.onAcountChange(addy[0], auth, "metamask", window.ethereum);
-        props.onNetworkChange(network, auth, "metamask", window.ethereum);
+        set({
+          
+          account: addy[0],
+          selectedNetwork: network,
+          isAuthenticated: auth,
+          protocal: 'metamask',
+          Connector: window.ethereum,
+          allowedNetworks : current.allowedNetworks
+        })
+       
 
         await listenMMAccount(Ethereum);
       } else throw new Error('Provider not found');

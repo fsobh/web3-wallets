@@ -7,6 +7,7 @@ export const UserInfoProvider = (props) => {
     isAuthenticated: false,
     protocal: false,
     Connector: false,
+    allowedNetworks : [1,4]
 
   });
 
