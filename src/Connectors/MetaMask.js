@@ -34,40 +34,86 @@ const getWeb3 = () =>
    
 });
 
-async function listenMMAccount(Ethereum, set) {
+async function listenMMAccount(Ethereum, current,set) {
 
+  try {
+    
+  
+
+ 
     window.ethereum.on('accountsChanged', async function (accounts) {
       console.log(accounts);
 
       const network = await Ethereum.eth.getChainId();
 
-      if (network !== getAllowedNetwork()) {
+      if (!current.allowedNetworks.includes(network)) {
         //must be on mainnet or Testnet
-        props.onNetworkChange(network, false, "metamask",window.ethereum);
+        
+        set({
+          account: accounts[0],
+          selectedNetwork: network,
+          isAuthenticated: false,
+          protocal: 'metamask',
+          Connector: window.ethereum,
+        });
+       
       } else {
-        //Do this check to ddetect if the user disconnected their wallet from the Dapp
-        if (accounts && accounts[0]) props.onAcountChange(accounts[0], true, "metamask",window.ethereum);
+        //Do this check to detect if the user disconnected their wallet from the Dapp
+        if (accounts && accounts[0]) 
+          set({
+              ...current,
+              account: accounts[0],
+              selectedNetwork: network,
+              isAuthenticated: true,
+              protocal: 'metamask',
+              Connector: window.ethereum,
+          });
         else {
-          /*
-			  @Arg1 : account address (String)
-			  @Arg2 : isAuthenticated (bool) 
-			*/
-          props.onAcountChange(false, false,false,false);
-          props.onNetworkChange(false, false,false,false);
+            set({
+              ...current,
+              account: false,
+              selectedNetwork: false,
+              isAuthenticated: false,
+              protocal: false,
+              Connector: false,
+            });
         }
       }
     });
 
     window.ethereum.on('chainChanged', async function (chainId) {
-      const chainIDDecimal = parseInt(chainId, 16);
+      
+      const chainIDDecimal = parseInt(chainId, 16); 
+      const addy = await Ethereum.eth.getAccounts();
 
-      if (chainIDDecimal !== getAllowedNetwork()) {
-        //must be on mainnet or Testnet (Web3 returns it as a decimal, thats why im converting ) - window.ethereum returns it as a hex
-        props.onNetworkChange(chainIDDecimal, false, "metamask",window.ethereum);
+      if (!current.allowedNetworks.includes(chainIDDecimal)) {
+        
+          set({
+            ...current,
+            account: addy[0],
+            selectedNetwork: chainIDDecimal,
+            isAuthenticated: false,
+            protocal: 'metamask',
+            Connector: window.ethereum, 
+          });
+ 
       } else {
-        props.onNetworkChange(chainIDDecimal, true, "metamask",window.ethereum);
+          
+        set({
+            ...current,
+            account: addy[0],
+            selectedNetwork: chainIDDecimal,
+            isAuthenticated: true,
+            protocal: 'metamask',
+            Connector: window.ethereum,
+          });
+
       }
     });
+
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export default async function connectMetaMask(current,set) {
@@ -84,24 +130,25 @@ export default async function connectMetaMask(current,set) {
         let auth = true;
 
         //TODO : FIX
-        if (network !== getAllowedNetwork()) auth = false;
+        if (!current.allowedNetworks.includes(network)) auth = false;
         //add check here for chain
 
         set({
-          
+          ...current,
           account: addy[0],
           selectedNetwork: network,
           isAuthenticated: auth,
           protocal: 'metamask',
           Connector: window.ethereum,
-          allowedNetworks : current.allowedNetworks
+          
         })
        
 
-        await listenMMAccount(Ethereum);
+        await listenMMAccount(Ethereum, current,set);
+
       } else throw new Error('Provider not found');
     } catch (error) {
-      console.log(error.code);
+      console.log(error);
 
       if (error.code === 4001) setRejected(true);
 

@@ -4,11 +4,12 @@ import {
   connectFormatic,
   connectMetaMask,
   connectPortis,
-  connectWalletConnect
+  connectWalletConnect,
+  connectCoinBaseWallet
 } from '../Connectors';
 import { UserContext } from '../State/Provider'
 export const ExampleComponent = ({ text }) => {
-  // const [connectedWallet, setWallet] = React.useContext(UserContext);
+  const [connectedWallet, setWallet] = React.useContext(UserContext);
 
   // React.useState(()=> setWallet({account: "qww",
   // selectedNetwork: null,
@@ -16,5 +17,5 @@ export const ExampleComponent = ({ text }) => {
   // protocal: false,
   // Connector: false,}),[])
 
-  return <div className={styles.test}>Example Component: {text}</div>
+  return <div onClick={async ()=>  connectFormatic(connectedWallet, setWallet)} className={styles.test}>Example Component: {connectedWallet.account}<br/>Example Component: {connectedWallet.selectedNetwork}</div>
 }

@@ -2,7 +2,7 @@ import QRCodeModal from '@walletconnect/qrcode-modal';
 import WalletConnect from '@walletconnect/client';
 
 
-async function listenWCAccount(connector) {
+async function listenWCAccount(connector,current,set) {
     connector.on('connect', (error, payload) => {
       if (error) {
         throw error;
@@ -10,22 +10,40 @@ async function listenWCAccount(connector) {
 
       const { accounts, chainId } = payload.params[0];
 
-      if (chainId !== getAllowedNetwork()) {
+      if (!current.allowedNetworks.includes(chainId)) {
         //must be on mainnet or Testnet
-        props.onNetworkChange(chainId, false,"walletconnect",connector);
+        set({
+          ...current,
+          selectedNetwork: chainId,
+          isAuthenticated: false,
+          protocal: "walletconnect",
+          Connector: connector,
+        });
       } else {
+ 
+        if (accounts && accounts[0]) 
+            set({
+              ...current,
+              account: accounts[0],
+              selectedNetwork: chainId,
+              isAuthenticated: true,
+              protocal: "walletconnect",
+              Connector: connector,
+            });
         
-      
-        
-      
-        if (accounts && accounts[0]) props.onAcountChange(accounts[0], true,"walletconnect",connector);
         else {
           /*
 					@Arg1 : account address (String)
 					@Arg2 : isAuthenticated (bool) 
 					*/
-          props.onAcountChange(false, false,false,false);
-          props.onNetworkChange(false, false,false,false);
+          set({
+            ...current,
+            account: false,
+            selectedNetwork: false,
+            isAuthenticated: false,
+            protocal: false,
+            Connector: false,
+          });
         }
       }
     });
@@ -37,41 +55,83 @@ async function listenWCAccount(connector) {
 
       const { accounts, chainId } = payload.params[0];
 
-      if (chainId !== getAllowedNetwork()) {
+      if (!current.allowedNetworks.includes(chainId)) {
         //must be on mainnet or Testnet
         console.log("CID : ", chainId)
-        props.onNetworkChange(chainId, false,"walletconnect",connector);
+        set({
+          ...current,
+         
+          selectedNetwork: chainId,
+          isAuthenticated: false,
+          protocal: "walletconnect",
+          Connector: connector,
+        });
+   
       } else {
-        props.onNetworkChange(chainId, true, "walletconnect",connector);
-        if (accounts && accounts[0]) props.onAcountChange(accounts[0], true,"walletconnect",connector);
+        set({
+          ...current,
+         
+          selectedNetwork: chainId,
+          isAuthenticated: true,
+          protocal: "walletconnect",
+          Connector: connector,
+        });
+        if (accounts && accounts[0]) 
+            set({
+              ...current,
+              account : accounts[0],
+              selectedNetwork: chainId,
+              isAuthenticated: true,
+              protocal: "walletconnect",
+              Connector: connector,
+            });
         else {
-          /*
-					@Arg1 : account address (String)
-					@Arg2 : isAuthenticated (bool) 
-					*/
-          props.onAcountChange(false, false,false,false);
-          props.onNetworkChange(false, false,false,false);
+          set({
+            ...current,
+            account: false,
+            selectedNetwork: false,
+            isAuthenticated: false,
+            protocal: false,
+            Connector: false,
+          });
         }
       }
     });
 
     connector.on('disconnect', (error, payload) => {
+     
+      set({
+        ...current,
+        account: false,
+        selectedNetwork: false,
+        isAuthenticated: false,
+        protocal: false,
+        Connector: false,
+      });
+    
       if (error) {
         throw error;
       }
-
-      props.onAcountChange(false, false,false,false);
-      props.onNetworkChange(false, false,false,false);
+      console.log("ass")
+    
     });
 
     window.addEventListener("beforeunload", (ev) => {
-      if (connector.connected)
+      if (connector.connected){
+        set({
+          ...current,
+          account: false,
+          selectedNetwork: false,
+          isAuthenticated: false,
+          protocal: false,
+          Connector: false,
+        });
         return  connector.killSession()
-      
+      }
    });
 }
 
-async function connectWalletConnect(disconnect = false) {
+async function connectWalletConnect(current,set) {
     try {
 
 
@@ -81,22 +141,21 @@ async function connectWalletConnect(disconnect = false) {
         qrcodeModal: QRCodeModal
       });
 
-      if (connector.connected && disconnect && props.authenticated){ //on disconnect button click
-         await connector.killSession()
-         props.onAcountChange(false, false,false,false);
-         props.onNetworkChange(false, false,false,false);
+      // if (connector.connected && disconnect && current.isAuthenticated){ //on disconnect button click
+      //    await connector.killSession()
 
-         return toast.info('Wallet Connect Session Terminated', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          });
+      //    set({
+      //     ...current,
+      //     account: false,
+      //     selectedNetwork: false,
+      //     isAuthenticated: false,
+      //     protocal: false,
+      //     Connector: false,
+      //   });
+        
+      //   return
 
-        }
+      //   }
 
       //JUST INCASE, proper handling is at end of listenWCAccount() function
       if (connector.connected)
@@ -108,27 +167,54 @@ async function connectWalletConnect(disconnect = false) {
       if (connector.connected) {
 
 
-        await listenWCAccount(connector);
+        await listenWCAccount(connector,current,set);
 
-        if (connector.chainId !== getAllowedNetwork()) {
+        if (!current.allowedNetworks.includes(connector.chainId)) {
           //must be on mainnet or Testnet
-          props.onNetworkChange(connector.chainId, false,"walletconnect",connector);
+
+          set({
+            ...current,
+            account: connector.accounts[0] || false,
+            selectedNetwork: connector.chainId,
+            isAuthenticated: false,
+            protocal: "walletconnect",
+            Connector: connector,
+          });
+
+          
 
           if (connector.accounts && connector.accounts[0]) 
-            props.onAcountChange(connector.accounts[0], false,"walletconnect",connector);
+              set({
+                ...current,
+                account: connector.accounts[0],
+                selectedNetwork: connector.chainId,
+                isAuthenticated: false,
+                protocal: "walletconnect",
+                Connector: connector,
+              });
+          
             
         } else {
           //Do this check to detect if the user disconnected their wallet from the Dapp
           if (connector.accounts && connector.accounts[0]) {
-            props.onAcountChange(connector.accounts[0], true,"walletconnect",connector);
-            props.onNetworkChange(connector.chainId, true,"walletconnect",connector);
+            set({
+              ...current,
+              account: connector.accounts[0],
+              selectedNetwork: connector.chainId,
+              isAuthenticated: true,
+              protocal: "walletconnect",
+              Connector: connector,
+            });
           } else {
-            /*
-			  @Arg1 : account address (String)
-			  @Arg2 : isAuthenticated (bool) 
-			*/
-            props.onAcountChange(false, false,false,false);
-            props.onNetworkChange(false, false,false,false);
+
+                set({
+                  ...current,
+                  account: false,
+                  selectedNetwork: false,
+                  isAuthenticated: false,
+                  protocal: false,
+                  Connector: false,
+                });
           }
         }
       }

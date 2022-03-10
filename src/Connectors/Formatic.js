@@ -1,53 +1,78 @@
 import Fortmatic from 'fortmatic';
 
 import Web3 from 'web3'
-export default async function connectFormatic(disconnect = false) {
+export default async function connectFormatic(current,set) {
     try {
-      setLoading({state:true,wallet:'Formatic'})
-      setError({state:false,error:``})
-      const fm = new Fortmatic('pk_test_25E2ADA8B773A4CB', getAllowedNetwork() === 4 ? 'rinkeby' : 'mainnet');
-      console.log(fm)
+    
+      if (!current.formaticOptions.key || !current.formaticOptions.network)
+          throw new Error("Key or Network not provided");
+
+
+      const fm = new Fortmatic(current.formaticOptions.key , current.formaticOptions.network);
+
       window.web3 = new Web3(fm.getProvider());
   
-      if (await fm.user.isLoggedIn() && props.authenticated && disconnect){
+      // if (await fm.user.isLoggedIn() && props.authenticated && disconnect){
   
-        fm.user.logout().then(() => {
+      //   fm.user.logout().then(() => {
               
-          props.onAcountChange(false, false,false,false);
-          props.onNetworkChange(false, false,false,false);
-  
-          toast.info('Formatic disconnected  ', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            });
-        
-        });
-        return
-      }
+      //     set({
+      //       ...current,
+      //       account: false,
+      //       selectedNetwork: false,
+      //       isAuthenticated: false,
+      //       protocal: false,
+      //       Connector: false,
+      //     });
+      //   });
+      //   return
+      // }
       //if()
      
       fm.user.login().then(async () => {
-        window.web3.eth.getAccounts().then((accounts)=> props.onAcountChange(accounts[0], true, "formatic",window.web3)); 
-        
+
+
         const network = await window.web3.eth.getChainId()
-  
-        if (network !== getAllowedNetwork()) {
-          //must be on mainnet or Testnet
-          props.onNetworkChange(network, false, "formatic",window.web3);
-        }
-        else
-          window.web3.eth.getChainId().then((id)=> props.onNetworkChange(id, true, "formatic",window.web3));
-     
-      
+
+        window.web3.eth.getAccounts().then((accounts)=>{
+
+
+          if (!current.allowedNetworks.includes(network)){
+            
+            set({
+              ...current,
+              account: accounts[0],
+              selectedNetwork : id,
+              isAuthenticated: false,
+              protocal: "formatic",
+              Connector: window.web3,
+            })
+          }
+          else
+            window.web3.eth.getChainId().then((id)=> 
+            set({
+                ...current,
+                account: accounts[0],
+                selectedNetwork : id,
+                isAuthenticated: true,
+                protocal: "formatic",
+                Connector: window.web3,
+              })
+              );
+        })
+
       }).catch((e)=>{ 
         
-        setLoading({state:false,wallet:''})
-        setError({state:true,error:`Formatic user denied access`})
+        console.error(e);
+
+        set({
+          ...current,
+          account: false,
+          selectedNetwork: false,
+          isAuthenticated: false,
+          protocal: false,
+          Connector: false,
+        });
         
         })
     
@@ -58,13 +83,28 @@ export default async function connectFormatic(disconnect = false) {
   
             fm.user.logout().then(() => {
               
-              props.onAcountChange(false, false,false,false);
-              props.onNetworkChange(false, false,false,false);
+          set({
+            ...current,
+            account: false,
+            selectedNetwork: false,
+            isAuthenticated: false,
+            protocal: false,
+            Connector: false,
+          });
             
             });
         }
       });
     } catch (error) {
+
+          set({
+            ...current,
+            account: false,
+            selectedNetwork: false,
+            isAuthenticated: false,
+            protocal: false,
+            Connector: false,
+          });
       
     }
   }
