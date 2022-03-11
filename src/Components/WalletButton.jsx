@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from '../styles.module.css'
+import styles from './styles/buttons.css'
 import {
   connectFormatic,
   connectMetaMask,
@@ -8,6 +8,15 @@ import {
   connectCoinBaseWallet
 } from '../Connectors';
 import { UserContext } from '../State/Provider'
+import {
+  MetamaskTop,
+	WalletConnectTop,
+  ConnectWalletIconswallet,
+  TrezorLogo,
+  Coinbase,
+  Formatic,
+  Portis
+} from '../assets/index'
 export const ExampleComponent = ({ text }) => {
   const [connectedWallet, setWallet] = React.useContext(UserContext);
 
@@ -18,67 +27,90 @@ export const ExampleComponent = ({ text }) => {
   // Connector: false,}),[])
 
   //return <div onClick={async ()=>  connectCoinBaseWallet(connectedWallet, setWallet)} className={styles.test}>Example Component: {connectedWallet.account}<br/>Example Component: {connectedWallet.selectedNetwork}</div>
-  return (
-    <div  className= "p-3 d-lg-flex d-md-flex justify-content-center">
+  // return (
+    
     
     
          
     
     
-        <div class="btn-group" role="group" aria-label="Basic example" style={{maxHeight: "fit-content", zIndex : 1}}>
-      {/* {props.network ? props.network == (process.env.REACT_APP_STAGE === "BETA" ?  "4" : "1") ? 
+  //       <div className={styles.btngroup } >
+  //     {/* {props.network ? props.network == (process.env.REACT_APP_STAGE === "BETA" ?  "4" : "1") ? 
        
-       process.env.REACT_APP_STAGE == "BETA" ? <button type="button" className="btn btn-warning p-1" style={{fontSize:"0.8em"}}>  
-            <span >Rinkeby </span>
-       </button>:
-          <button type="button" className="btn btn-success p-1" style={{fontSize:"0.8em"}}>  
-          <span >Mainnet </span>
-      </button>
-       : 
-       <button type="button" className="btn btn-danger p-1" style={{fontSize:"0.8em"}}>  
-            <span >Network not supported</span>
-        </button>    
-       :
-       <button type="button" className="btn btn-danger p-1" style={{fontSize:"0.8em"}}>  
-            <span >Not connected</span>
-       </button>
-     } */}
-  <button type="button" class="btn  p-1 connectButton" style={{fontSize:"0.8em"}} onClick={()=> props.account && props.authenticated && (typeof props.account === 'string' || props.account instanceof String) ? null : setOpen(!isOpen)}><span className="font-weight-bold  " >{  props.account && (typeof props.account === 'string' || props.account instanceof String) ? `${props.account.substring(0,6)}...${props.account.substring(props.account.length - 6, props.account.length )}    `  : `Connect to Wallet    ` }</span></button>
+  //      process.env.REACT_APP_STAGE == "BETA" ? <button type="button" className="btn btn-warning p-1" style={{fontSize:"0.8em"}}>  
+  //           <span >Rinkeby </span>
+  //      </button>:
+  //         <button type="button" className="btn btn-success p-1" style={{fontSize:"0.8em"}}>  
+  //         <span >Mainnet </span>
+  //     </button>
+  //      : 
+  //      <button type="button" className="btn btn-danger p-1" style={{fontSize:"0.8em"}}>  
+  //           <span >Network not supported</span>
+  //       </button>    
+  //      :
+  //      <button type="button" className="btn btn-danger p-1" style={{fontSize:"0.8em"}}>  
+  //           <span >Not connected</span>
+  //      </button>
+  //    } */}
+  // <button className={styles.btn } ><span className="font-weight-bold  " > Connect to Wallet    </span></button>
       
-      {
+
       
-      props.Protocal ? 
+  //     {/** To do : Add logout button   */}
+  //     {/* {props.account && props.authenticated && (typeof props.account === 'string' || props.account instanceof String) ?  <button type="button" className="btn btn-danger p-1" style={{fontSize:"0.6em"}}
+  //     onClick={()=> {
+    
+  //       console.log(myRef)
+    
+  //     }}
+  //     >  
+  //           <span >Logout</span>
+  //      </button> :null} */}
+    
+     
+  //   </div>
+    
+ 
+  //     );
+  return (
+      <div   className={styles.gridcontainer}>
+        <div className={styles.griditemstart}>{connectedWallet.selectedNetwork || 1}</div>
+        <div className={styles.griditemcenter}>{connectedWallet.account || 2 }</div>
+        <div className={styles.gridimg}>
+        {
       
-      props.Protocal == "metamask" ? 
+      connectedWallet.protocal ? 
       
-      <img className="bg-white p-1" src={MetamaskTop} height="35px" width="35px" style={
+      connectedWallet.protocal == "metamask" ? 
+      
+      <img className="bg-white p-1 " src={MetamaskTop} height="35px" width="35px" style={
         /**props.account && props.authenticated && (typeof props.account === 'string' || props.account instanceof String) ?{} : */  {borderTopRightRadius : "5px",borderBottomRightRadius : "5px"}} ></img>
       
       
-       : props.Protocal == "walletconnect" ? 
+       : connectedWallet.protocal == "walletconnect" ? 
        
        <img className="bg-white p-1" src={WalletConnectTop} height="35px" width="35px" style={
          /**props.account && props.authenticated && (typeof props.account === 'string' || props.account instanceof String) ?{} : */  {borderTopRightRadius : "5px",borderBottomRightRadius : "5px"}} ></img>
        
        : 
     
-        props.Protocal == "trezor" ? 
+        connectedWallet.protocal == "trezor" ? 
        
         <img className="bg-white p-1" src={TrezorLogo} height="35px" width="35px" style={
          /**props.account && props.authenticated && (typeof props.account === 'string' || props.account instanceof String) ?{} : */ {borderTopRightRadius : "5px",borderBottomRightRadius : "5px"}} ></img>
        :
     
-       props.Protocal == "portis" ? 
+       connectedWallet.protocal == "portis" ? 
        
         <img className="bg-white p-1" src={Portis} height="35px" width="35px" style={
           /**props.account && props.authenticated && (typeof props.account === 'string' || props.account instanceof String) ?{} : */  {borderTopRightRadius : "5px",borderBottomRightRadius : "5px"}} ></img>
        :
-        props.Protocal == "coinbase" ? 
+        connectedWallet.protocal == "coinbase" ? 
        
         <img className="bg-white " src={Coinbase} height="35px" width="35px" style={
           /**props.account && props.authenticated && (typeof props.account === 'string' || props.account instanceof String) ?{} : */  {borderTopRightRadius : "5px",borderBottomRightRadius : "5px"}} ></img>
        :
-       props.Protocal == "formatic" ? 
+       connectedWallet.protocal == "formatic" ? 
        
         <img className="bg-white " src={Formatic} height="35px" width="35px" style={
           /**props.account && props.authenticated && (typeof props.account === 'string' || props.account instanceof String) ?{} : */  {borderTopRightRadius : "5px",borderBottomRightRadius : "5px"}} ></img>
@@ -86,27 +118,10 @@ export const ExampleComponent = ({ text }) => {
         <img className="bg-dark p-1" src={ConnectWalletIconswallet} height="35px" width="35px" style={
           /**props.account && props.authenticated && (typeof props.account === 'string' || props.account instanceof String) ?{} : */  {borderTopRightRadius : "5px",borderBottomRightRadius : "5px"}} ></img>
     
-       : <img className="bg-dark p-1" src={ConnectWalletIconswallet} height="35px" width="35px" style={
-         /**props.account && props.authenticated && (typeof props.account === 'string' || props.account instanceof String) ?{} : */ {borderTopRightRadius : "5px",borderBottomRightRadius : "5px"}} ></img>
-       
+       : <img className={styles.straight} src={Formatic} />  
        }
-      
-      {/** To do : Add logout button   */}
-      {/* {props.account && props.authenticated && (typeof props.account === 'string' || props.account instanceof String) ?  <button type="button" className="btn btn-danger p-1" style={{fontSize:"0.6em"}}
-      onClick={()=> {
-    
-        console.log(myRef)
-    
-      }}
-      >  
-            <span >Logout</span>
-       </button> :null} */}
-    
-     
-    </div>
-    
+       </div>  
+ 
       </div>
-      );
-
-
+  );
 }
