@@ -51,11 +51,12 @@
     "dist"
   ],
   "dependencies": {
+    "@coinbase/wallet-sdk": "^3.0.4",
     "@portis/web3": "^4.0.7",
     "@walletconnect/client": "^1.7.4",
     "@walletconnect/qrcode-modal": "^1.7.4",
+    "@web3-react/walletlink-connector": "^6.2.13",
     "fortmatic": "^2.2.1",
-    "walletlink": "^2.5.0",
     "web3": "^1.7.1"
   }
 }

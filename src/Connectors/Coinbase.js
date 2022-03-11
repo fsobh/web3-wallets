@@ -1,7 +1,7 @@
-import Web3 from "web3";
-import WalletLink from 'walletlink'
+import { WalletLinkConnector } from "@web3-react/walletlink-connector";
+import Web3 from 'web3'
 
-async function listenCoinbaseAccount(ethereum){
+async function listenCoinbaseAccount(ethereum, current,set){
 
     // Initialize a Web3 object
 try {
@@ -10,116 +10,190 @@ try {
 
  const web3 = new Web3(ethereum)
 
- ethereum.send('eth_requestAccounts').then(async (accounts) => {
+//  ethereum.on('eth_requestAccounts').then(async (accounts) => {
 
+//   console.log("as")
+//   const network = await web3.eth.getChainId()
+//   let auth = false;
 
-  if(accounts && accounts[0]){
-  props.onAcountChange(accounts[0], true, "coinbase",ethereum);
-  props.onNetworkChange(await web3.eth.getChainId(), true, "coinbase",ethereum);
-  }
-})
+//   if (current.allowedNetworks.includes(network))
+//       auth = true; 
+    
+  
+//     if (accounts && accounts[0])
+//       set({
+//           ...current,
+//           account: accounts[0],
+//           selectedNetwork: network,
+//           isAuthenticated: auth,
+//           protocal: "coinbase",
+//           Connector: ethereum,
+//       });
+//     else 
+//       set({
+//         ...current,
+//         account: false,
+//         selectedNetwork: false,
+//         isAuthenticated: false,
+//         protocal: false,
+//         Connector: false,
+//       });
+// })
 
 
 
 ethereum.on('chainChanged', async function (chainId) {
+  console.log("sd")
   const chainIDDecimal = parseInt(chainId, 16);
 
-  if (chainIDDecimal !== getAllowedNetwork()) {
-    //must be on mainnet or Testnet (Web3 returns it as a decimal, thats why im converting ) - window.ethereum returns it as a hex
-    props.onNetworkChange(chainIDDecimal, false, "coinbase",ethereum);
-  } else {
-    props.onNetworkChange(chainIDDecimal, true, "coinbase",ethereum);
-  }
+  let auth = false;
+
+  if (current.allowedNetworks.includes(chainIDDecimal))
+      auth = true; 
+    
+    const accounts = await web3.eth.getAccounts()
+  
+    if (accounts && accounts[0])
+      set({
+        ...current,
+        account: accounts[0],
+        selectedNetwork: chainIDDecimal,
+        isAuthenticated: auth,
+        protocal: "coinbase",
+        Connector: ethereum,
+      });
+    else 
+       set({
+         ...current,
+         account: false,
+         selectedNetwork: false,
+         isAuthenticated: false,
+         protocal: false,
+         Connector: false,
+        });
+
 });
 
 
 ethereum.on('accountsChanged', async function (accounts) {
-  console.log(accounts);
-
+  
+  console.log("whyyy")
   const network = await web3.eth.getChainId()
+  let auth = false;
 
-  if (network !== getAllowedNetwork()) {
-    //must be on mainnet or Testnet
-    props.onNetworkChange(network, false, "coinbase",ethereum);
-  } else {
-    //Do this check to ddetect if the user disconnected their wallet from the Dapp
-    if (accounts && accounts[0]) props.onAcountChange(accounts[0], true, "coinbase",ethereum);
-    else {
-      /*
-    @Arg1 : account address (String)
-    @Arg2 : isAuthenticated (bool) 
-  */
-      props.onAcountChange(false, false,false,false);
-      props.onNetworkChange(false, false,false,false);
-    }
-  }
+  if (current.allowedNetworks.includes(network))
+      auth = true; 
+    
+  
+    if (accounts && accounts[0])
+      set({
+        ...current,
+        account: accounts[0],
+        selectedNetwork: network,
+        isAuthenticated: auth,
+        protocal: "coinbase",
+        Connector: ethereum,
+      });
+    else 
+       set({
+         ...current,
+         account: false,
+         selectedNetwork: false,
+         isAuthenticated: false,
+         protocal: false,
+         Connector: false,
+        });
 });
 
 window.addEventListener("beforeunload", (ev) => {
   
-        ethereum.disconnect()
+        ethereum.disconnect();
+
+        set({
+            ...current,
+            account: false,
+            selectedNetwork: false,
+            isAuthenticated: false,
+            protocal: false,
+            Connector: false,
+        });
   
 });
 
 } catch (error) {
   
-  console.log(error)
+  console.log(error);
+  set({
+    ...current,
+    account: false,
+    selectedNetwork: false,
+    isAuthenticated: false,
+    protocal: false,
+    Connector: false,
+});
+  
 }
 
 
 }
-export default async function connectCoinBaseWallet(disconnect = false){
+export default async function connectCoinBaseWallet(current,set){
 
 try {
   
+const APP_NAME = 'Your APP'
+const DEFAULT_ETH_JSONRPC_URL = 'https://mainnet.infura.io/v3/29697ff0dc574effbd5f5e104a845ed0'
 
-const APP_NAME = 'Open RPG'
-const APP_LOGO_URL = 'https://example.com/logo.png'
-const ETH_JSONRPC_URL = 'https://mainnet.infura.io/v3/2d50c035b508455dbc6f58d4dc8a217c'
-const CHAIN_ID = getAllowedNetwork()
 
 // Initialize WalletLink
-const walletLink = new WalletLink({
+// Initialize Coinbase Wallet SDK
+const coinbaseWallet = new WalletLinkConnector({
   appName: APP_NAME,
-  appLogoUrl: APP_LOGO_URL,
-  darkMode: true,
-  overrideIsMetaMask : true,
-  
-  
+  supportedChainIds: current.allowedNetworks,
+  url : DEFAULT_ETH_JSONRPC_URL
 })
 
 
+await coinbaseWallet.activate().then(async (provider)=> {
 
-if(walletLink){
 
+  
+
+  await listenCoinbaseAccount(await coinbaseWallet.getProvider(),current,set)
+      
+
+  
+
+
+})
 // Initialize a Web3 Provider object
- const ethereum = walletLink.makeWeb3Provider(ETH_JSONRPC_URL, CHAIN_ID)
+//const ethereum = coinbaseWallet.makeWeb3Provider(DEFAULT_ETH_JSONRPC_URL, DEFAULT_CHAIN_ID)
 
- if(ethereum && ethereum.isConnected() && props.authenticated && disconnect){
+//await listenCoinbaseAccount(ethereum,current,set)
 
-  ethereum.disconnect()
 
-  props.onAcountChange(false, false,false);
-  props.onNetworkChange(false, false,false);
-  toast.info('Coinbase wallet disconnected  ', {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    });
-    return
 
- }
+//  if(ethereum && ethereum.isConnected() && props.authenticated && disconnect){
+
+//   ethereum.disconnect()
+
+//     set({
+//             ...current,
+//             account: false,
+//             selectedNetwork: false,
+//             isAuthenticated: false,
+//             protocal: false,
+//             Connector: false,
+//     });
+//     return
+
+//  }
  
  
 
- if(ethereum && ethereum.isConnected())
-    await listenCoinbaseAccount(ethereum)
 
-}
+    
+
+
 
 } catch (error) {
   console.log(error)
