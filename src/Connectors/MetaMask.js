@@ -45,7 +45,7 @@ async function listenMMAccount(Ethereum, current,set) {
       console.log(accounts);
 
       const network = await Ethereum.eth.getChainId();
-      const networkName = await Ethereum.eth.net.getNetworkType()
+    
 
       if (!current.allowedNetworks.includes(network)) {
         //must be on mainnet or Testnet
@@ -53,7 +53,7 @@ async function listenMMAccount(Ethereum, current,set) {
         set({
           account: accounts[0],
           selectedNetwork: network,
-          networkName : networkName,
+         
           isAuthenticated: false,
           protocal: 'metamask',
           Connector: window.ethereum,
@@ -66,7 +66,6 @@ async function listenMMAccount(Ethereum, current,set) {
               ...current,
               account: accounts[0],
               selectedNetwork: network,
-              networkName : networkName,
               isAuthenticated: true,
               protocal: 'metamask',
               Connector: window.ethereum,

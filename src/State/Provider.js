@@ -4,7 +4,6 @@ export const UserInfoProvider = (props) => {
   const [connectedWallet, setWallet] = useState({
     account: null,
     selectedNetwork: false,
-    networkName : false,
     isAuthenticated: false,
     protocal: false,
     Connector: false,

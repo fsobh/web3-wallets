@@ -12,14 +12,24 @@
     background-color: #4f5b66;
     border-right: 1px solid rgba(0, 0, 0, 0.8);
     padding: 1px 5px 0px 5px;
-    font-size: 19px;
+    font-size: 17px;
     color: white;
+    width: max-content;
   }
+  .griditemstartnon {
+    background-color: #4f5b66;
+    padding: 1px 5px 0px 5px;
+    font-size: 17px;
+    color: white;
+    width: max-content;
+  }
+
   .griditemcenter {
     background-color: #4f5b66;
     padding: 1px 5px 0px 5px;
-    font-size: 19px;
+    font-size: 17px;
     color: white;
+    width: max-content;
   }
 
   .gridimg {
@@ -29,10 +39,11 @@
     text-align: center;
     height: 35px;
     width: 35px;
+    padding: 4px;
   }
 
   .gridimg img {
-    
+   
     height: 35px;
     width: 35px;
     }
