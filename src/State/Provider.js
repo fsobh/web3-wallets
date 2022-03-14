@@ -3,7 +3,8 @@ export const UserContext = createContext();
 export const UserInfoProvider = (props) => {
   const [connectedWallet, setWallet] = useState({
     account: null,
-    selectedNetwork: null,
+    selectedNetwork: false,
+    networkName : false,
     isAuthenticated: false,
     protocal: false,
     Connector: false,

@@ -18,6 +18,7 @@ import {
   Portis
 } from '../assets/index'
 export const ExampleComponent = ({ text }) => {
+
   const [connectedWallet, setWallet] = React.useContext(UserContext);
 
   // React.useState(()=> setWallet({account: "qww",
@@ -74,8 +75,8 @@ export const ExampleComponent = ({ text }) => {
   //     );
   return (
       <div   className={styles.gridcontainer}>
-        <div className={styles.griditemstart}>{connectedWallet.selectedNetwork || 1}</div>
-        <div className={styles.griditemcenter}>{connectedWallet.account || 2 }</div>
+        <div className={styles.griditemstart}>{connectedWallet.networkName || 1}</div>
+        <div className={styles.griditemcenter} onClick={async ()=>{await connectWalletConnect(connectedWallet,setWallet)}}>{connectedWallet.account || 2 }</div>
         <div className={styles.gridimg}>
         {
       
@@ -118,7 +119,7 @@ export const ExampleComponent = ({ text }) => {
         <img className="bg-dark p-1" src={ConnectWalletIconswallet} height="35px" width="35px" style={
           /**props.account && props.authenticated && (typeof props.account === 'string' || props.account instanceof String) ?{} : */  {borderTopRightRadius : "5px",borderBottomRightRadius : "5px"}} ></img>
     
-       : <img className={styles.straight} src={Formatic} />  
+       : <img className={styles.straight} src={ConnectWalletIconswallet} />  
        }
        </div>  
  

@@ -45,6 +45,7 @@ async function listenMMAccount(Ethereum, current,set) {
       console.log(accounts);
 
       const network = await Ethereum.eth.getChainId();
+      const networkName = await Ethereum.eth.net.getNetworkType()
 
       if (!current.allowedNetworks.includes(network)) {
         //must be on mainnet or Testnet
@@ -52,18 +53,20 @@ async function listenMMAccount(Ethereum, current,set) {
         set({
           account: accounts[0],
           selectedNetwork: network,
+          networkName : networkName,
           isAuthenticated: false,
           protocal: 'metamask',
           Connector: window.ethereum,
         });
        
       } else {
-        //Do this check to detect if the user disconnected their wallet from the Dapp
+        
         if (accounts && accounts[0]) 
           set({
               ...current,
               account: accounts[0],
               selectedNetwork: network,
+              networkName : networkName,
               isAuthenticated: true,
               protocal: 'metamask',
               Connector: window.ethereum,
@@ -73,6 +76,7 @@ async function listenMMAccount(Ethereum, current,set) {
               ...current,
               account: false,
               selectedNetwork: false,
+              networkName : false,
               isAuthenticated: false,
               protocal: false,
               Connector: false,
@@ -85,6 +89,7 @@ async function listenMMAccount(Ethereum, current,set) {
       
       const chainIDDecimal = parseInt(chainId, 16); 
       const addy = await Ethereum.eth.getAccounts();
+      const networkName = await Ethereum.eth.net.getNetworkType()
 
       if (!current.allowedNetworks.includes(chainIDDecimal)) {
         
@@ -92,6 +97,7 @@ async function listenMMAccount(Ethereum, current,set) {
             ...current,
             account: addy[0],
             selectedNetwork: chainIDDecimal,
+            networkName : networkName,
             isAuthenticated: false,
             protocal: 'metamask',
             Connector: window.ethereum, 
@@ -103,6 +109,7 @@ async function listenMMAccount(Ethereum, current,set) {
             ...current,
             account: addy[0],
             selectedNetwork: chainIDDecimal,
+            networkName : networkName,
             isAuthenticated: true,
             protocal: 'metamask',
             Connector: window.ethereum,
@@ -123,10 +130,13 @@ export default async function connectMetaMask(current,set) {
 
       const Ethereum = await getWeb3();
 
+
+
       if (Ethereum) {
         //this is all the user data we need, and need to track
         const addy = await Ethereum.eth.getAccounts();
         const network = await Ethereum.eth.getChainId();
+        const networkName = await Ethereum.eth.net.getNetworkType()
         let auth = true;
 
         //TODO : FIX
@@ -137,6 +147,7 @@ export default async function connectMetaMask(current,set) {
           ...current,
           account: addy[0],
           selectedNetwork: network,
+          networkName : networkName,
           isAuthenticated: auth,
           protocal: 'metamask',
           Connector: window.ethereum,
