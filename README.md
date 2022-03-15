@@ -12,18 +12,6 @@ npm install --save web3-wallets
 
 ## Usage
 
-```jsx
-import React, { Component } from 'react'
-
-import MyComponent from 'web3-wallets'
-import 'web3-wallets/dist/index.css'
-
-class Example extends Component {
-  render() {
-    return <MyComponent />
-  }
-}
-```
 
 ## License
 
