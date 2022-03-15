@@ -107,7 +107,7 @@ ethereum.on('accountsChanged', async function (accounts) {
 
 window.addEventListener("beforeunload", (ev) => {
   
-        ethereum.disconnect();
+        ethereum.deactivate();
 
         set({
             ...current,
@@ -151,6 +151,7 @@ const coinbaseWallet = new WalletLinkConnector({
   supportedChainIds: current.allowedNetworks,
   url : DEFAULT_ETH_JSONRPC_URL
 })
+
 
 
 await coinbaseWallet.activate().then(async (provider)=> {

@@ -12,7 +12,7 @@ export default async function connectFormatic(current,set) {
 
       window.web3 = new Web3(fm.getProvider());
   
-      // if (await fm.user.isLoggedIn() && props.authenticated && disconnect){
+      // if (await fm.user.isLoggedIn()  && disconnect){
   
       //   fm.user.logout().then(() => {
               

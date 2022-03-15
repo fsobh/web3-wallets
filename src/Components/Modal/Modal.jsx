@@ -7,7 +7,7 @@ export const Modal = ({ children, ...props }) => {
     return ReactDOM.createPortal(React.cloneElement(children, props), document.querySelector("body"));
 }
 
-const ModalContent = ({ children, open = false, onClose }) => {
+const ModalContent = ({ children, open = false, onClose , account}) => {
     const ref = useRef();
 
     useOnClickOutside(ref, onClose);
@@ -26,7 +26,7 @@ const ModalContent = ({ children, open = false, onClose }) => {
 
 
             <div className={styles.daddy}>
-                Connect wallet 
+               {!account ? `Connect Wallet` : `Connected Wallet`}
                 <img className={styles.logo}  src={ConnectWalletIconswallet}/>
                 <span onClick={onClose} className={styles.close}>&times;</span>  
                 <hr className={styles.bord}/>

@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react'
-import styles from './styles/buttons.css'
+import styles from './styles/buttons.module.css'
 import { fetchNetworkNameByID } from '../Utils/NetworkUtil';
 import {
   connectFormatic,
@@ -40,21 +40,23 @@ export const WalletButton = () => {
   const handleClick = async (i) => {
 
     switch (i){
-      case 0 : 
-        await connectMetaMask(connectedWallet, setWallet);
-        break;
-      case 1 : 
-        await connectWalletConnect(connectedWallet, setWallet);
-        break;
-      case 2 : 
-        await connectCoinBaseWallet(connectedWallet, setWallet);
-        break;
-      case 3 : 
-        await connectFormatic(connectedWallet, setWallet);
-        break;
-      case 4 : 
-        await connectPortis(connectedWallet, setWallet);
-        break;
+      case 0 : {
+        return await connectMetaMask(connectedWallet, setWallet);
+      }
+      case 1 : {
+      return await connectWalletConnect(connectedWallet, setWallet);
+      }
+      case 2 : {
+      return  await connectCoinBaseWallet(connectedWallet, setWallet);
+      }
+      case 3 : { 
+      return await connectFormatic(connectedWallet, setWallet);
+      }
+      case 4 :  {
+      return await connectPortis(connectedWallet, setWallet);
+      }
+      default:
+         return console.log("none")
 
       }
 
@@ -78,12 +80,66 @@ export const WalletButton = () => {
    
     
     {/* Modal Code Here */}
-    <Modal open={isModalOpen} onClose={handleCloseModal}>
+    <Modal open={isModalOpen} onClose={handleCloseModal} account = {connectedWallet.account}>
       <Modal.ModalContent>
 
       {connectedWallet.account && connectedWallet.isAuthenticated &&
     (typeof connectedWallet.account === 'string' || connectedWallet.account instanceof String) ?
-      null : 
+      <div   className={styles.accountInfoContainer}>
+        <div className={styles.accountInfoheader} >
+                 
+                    
+        {connectedWallet.protocal ?
+
+  connectedWallet.protocal == "metamask" ?
+
+    <img className={styles.walicon} src={MetamaskTop} height="35px" width="35px"/>
+
+    : connectedWallet.protocal == "walletconnect" ?
+
+      <img className={styles.walicon} src={WalletConnectTop} height="35px" width="35px"/>
+      :
+
+      connectedWallet.protocal == "trezor" ?
+
+        <img className={styles.walicon} src={TrezorLogo} height="35px" width="35px" />
+          :
+
+        connectedWallet.protocal == "portis" ?
+
+          <img className={styles.walicon} src={Portis} height="35px" width="35px" />
+                :
+          connectedWallet.protocal == "coinbase" ?
+
+            <img className={styles.walicon} src={Coinbase} height="35px" width="35px" />
+                :
+            connectedWallet.protocal == "formatic" ?
+
+              <img className={styles.walicon} src={Formatic} height="35px" width="35px" />
+              :
+              <img className={styles.walicon} src={ConnectWalletIconswallet} height="35px" width="35px" />
+              : <img className={styles.straight} src={ConnectWalletIconswallet} />
+}
+                  <div className={styles.pricingItempricing}> {connectedWallet.account} </div>
+        </div>
+
+        <div className={styles.accountInfoheader} >
+                 
+                    
+                 
+                 <div className={styles.pricingItempricing}><span  className={styles.thin}>Connected network : </span> {fetchNetworkNameByID(connectedWallet.selectedNetwork).name} </div>
+                 
+       </div>
+       <div className={styles.accountInfoheader} >
+                 
+                    
+                 {/**Cant do this for meta mask (display banner), walletconnect : killsession() - coinbase : close() - formatic & portis (thru sdk) ==> logout() */}
+                 <div className={styles.pricingItempricing}> <button onClick= {async ()=> {await connectedWallet.Connector.logout()}} className={styles.disconnectButton }>Disconnect</button></div>
+                 
+       </div>
+      
+
+      </div>: 
       whoWeData &&
               whoWeData.map((item, i) => (
                 <>

@@ -1,6 +1,6 @@
 import QRCodeModal from '@walletconnect/qrcode-modal';
 import WalletConnect from '@walletconnect/client';
-import Web3 from 'web3'
+
 
 async function listenWCAccount(connector,current,set) {
     connector.on('connect', (error, payload) => {
@@ -165,10 +165,8 @@ async function connectWalletConnect(current,set) {
       await connector.connect();
 
       if (connector.connected) {
-        const web3 = new Web3(connector);
-        const networkName = await web3.eth.net.getNetworkType()
-
-        console.log(networkName)
+        
+     
 
           
         await listenWCAccount(connector,current,set);
