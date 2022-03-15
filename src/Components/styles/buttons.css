@@ -7,6 +7,7 @@
     width : max-content;
     border-radius: 3px;
     align-items: center;
+    
   }
   .griditemstart {
     background-color: #4f5b66;
@@ -22,6 +23,7 @@
     font-size: 17px;
     color: white;
     width: max-content;
+    cursor: pointer;
   }
 
   .griditemcenter {
@@ -47,3 +49,41 @@
     height: 35px;
     width: 35px;
     }
+
+    
+/* ##### 11.0 Price Table Area CSS ##### */
+
+
+
+.walicon{
+  border-radius: 10px;
+  margin-right: 10px;
+ 
+}
+
+.pricingItem  {
+  display: inline;
+  font-size: 16px;
+ position: relative;
+  color: #fff;
+  font-weight: bold;
+  padding: 5px;
+  align-self: center;
+  display: grid;
+  grid-template-columns: max-content  max-content;
+  width : min-content;
+  border-radius: 7px;
+  cursor: pointer;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  /*background-image: url(../img/svg/discount-bg-1.svg);*/
+}
+.bord {
+    
+  color: white;
+  width: 100%;
+  
+  
+}
+

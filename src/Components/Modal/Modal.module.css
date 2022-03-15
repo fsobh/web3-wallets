@@ -1,0 +1,89 @@
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: max-content;
+    grid-template-rows: 1fr;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75);
+    box-sizing: border-box;
+    vertical-align: middle;
+    padding: 20vw;
+
+}
+.modal__content {
+    position: relative;
+    background-color: rgb(37, 36, 36);
+    padding: 0.9em;
+    border-radius: 15px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+.close {
+    
+    color: red;
+    float: right;
+    font-size: 50px;
+    
+    
+}
+.bord {
+    width: 80%;
+    background-color: white;
+    border-radius: 15px;
+    height : 5px;
+    
+  }
+.close:hover,
+.close:focus {
+  color: rgb(255, 0, 0);
+  text-decoration: none;
+  cursor: pointer;
+}
+.gridcontainer {
+
+      display: grid;
+      grid-template-columns:   50% 50%;
+
+      width : max-content;
+    
+     
+      
+}
+.griditemstartnon {
+    
+      align-items: center;
+      font-size: 17px;
+      color: white;
+      display: inline;
+      cursor: pointer;
+      vertical-align: middle;
+      float: right;
+}
+.griditemcenter {
+     
+
+      margin-right: 8px;
+      font-size: 17px;
+      color: white;
+      
+}
+.daddy {
+    align-items: center;
+    font-size: 21px;
+    font-weight: bold;
+    color: white;
+   
+}
+.logo {
+     
+      height: 35px;
+      width: 35px;
+      margin-left: 0.8vw;
+      vertical-align: middle;
+}
