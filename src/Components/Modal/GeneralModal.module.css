@@ -12,23 +12,39 @@
     background-color: rgba(0, 0, 0, 0.75);
     box-sizing: border-box;
     vertical-align: middle;
-    padding: 20vw;
+    padding: 23vw;
 
+}
+.disconnectButton  {
+ align-self: center;
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: sans-serif;
+  cursor: pointer;
+  
+  padding: 10px;
+  min-width: 100px;
+  border: 0px;
+  -webkit-transition: background-color 100ms linear;
+  -ms-transition: background-color 100ms linear;
+   transition: background-color 100ms linear;
+  background: #e74c3c;
+  color: #ffffff;
 }
 .modal__content {
     position: relative;
     background-color: rgb(37, 36, 36);
-    padding: 0.9em;
+    padding: 0.8em;
     border-radius: 15px;
     text-align: center;
     align-items: center;
     justify-content: center;
+    border: 3px solid white;
 }
 .close {
     
     color: red;
-    float: right;
-    font-size: 50px;
+    font-size: 100px;
     
     
 }
@@ -43,50 +59,19 @@
 .close:focus {
   color: rgb(255, 0, 0);
   text-decoration: none;
-  cursor: pointer;
+  
 }
-.gridcontainer {
 
-      display: grid;
-      grid-template-columns:   50% 50%;
-
-      width : max-content;
-    
-     
-      
-}
-.griditemstartnon {
-    
-      align-items: center;
-      font-size: 17px;
-      color: white;
-      display: inline;
-      cursor: pointer;
-      vertical-align: middle;
-      float: right;
-}
-.griditemcenter {
-     
-
-      margin-right: 8px;
-      font-size: 17px;
-      color: white;
-      
-}
 .daddy {
     align-items: center;
     font-size: 21px;
+    display: block;
     font-weight: bold;
     color: white;
+    justify-content: center;
    
 }
-.logo {
-     
-      height: 35px;
-      width: 35px;
-      margin-left: 0.8vw;
-      vertical-align: middle;
-}
+
 .ldsdualring {
     display: inline-block;
     width: 80px;

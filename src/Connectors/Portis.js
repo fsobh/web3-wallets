@@ -4,8 +4,8 @@ import Web3 from 'web3'
 const listenPortisAccount = async (portis,web3,current,set) => {
     try {
   
-   portis.onError(error => {
-        console.log('error', error);
+  portis.onError(error => {
+        console.log('oh fuckkkkk', error);
           set({
             ...current,
             account: false,
@@ -18,8 +18,9 @@ const listenPortisAccount = async (portis,web3,current,set) => {
      
       });
       
-      portis.onLogin(async (walletAddress, email, reputation) => {
+      await portis.onLogin(async (walletAddress, email, reputation) => {
  
+        
         set({
           ...current,
           account: walletAddress,
@@ -52,7 +53,7 @@ const listenPortisAccount = async (portis,web3,current,set) => {
           }));
   
           
-      })
+      }).catch((e)=>{consolee.log("ohfukkkk")})
   
       portis.onLogout(() => {
         
@@ -136,6 +137,7 @@ const listenPortisAccount = async (portis,web3,current,set) => {
   
         web3.eth.getAccounts().then(async(accounts)=> {
          
+          
   
           if(accounts && accounts[0])
           {
@@ -175,7 +177,7 @@ const listenPortisAccount = async (portis,web3,current,set) => {
             }));
     
          
-          await listenPortisAccount(portis,web3,current,set)
+          await listenPortisAccount(portis,web3,current,set);
     
         window.addEventListener("beforeunload", async (ev) => {
         
@@ -196,13 +198,16 @@ const listenPortisAccount = async (portis,web3,current,set) => {
           }
       
       
+        }).finally(()=>{
+          close(false)
+          setError({isOpen:false})
         })
   
       }
   
   
     } catch (error) {
-      
+     
     }
   
   }

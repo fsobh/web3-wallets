@@ -211,6 +211,7 @@ async function connectWalletConnect(current,set) {
             });
           } else {
 
+            
                 set({
                   ...current,
                   account: false,
@@ -224,6 +225,8 @@ async function connectWalletConnect(current,set) {
       }
     } catch (error) {
       console.log(error);
+
+   
     }
 }
 

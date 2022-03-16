@@ -122,16 +122,16 @@ async function listenMMAccount(Ethereum, current,set) {
   }
 }
 
-export default async function connectMetaMask(current,set) {
+export default async function connectMetaMask(current,set, setError, close) {
     try {
 
 
 
       const Ethereum = await getWeb3();
-
-
+   
 
       if (Ethereum) {
+        
         //this is all the user data we need, and need to track
         const addy = await Ethereum.eth.getAccounts();
         const network = await Ethereum.eth.getChainId();
@@ -154,16 +154,14 @@ export default async function connectMetaMask(current,set) {
         })
        
 
-        await listenMMAccount(Ethereum, current,set);
+        await listenMMAccount(Ethereum, current,set).finally(()=> setError({isOpen : false, message : ``, type : false}));
 
       } else throw new Error('Provider not found');
     } catch (error) {
-      console.log(error);
-
-      if (error.code === 4001) setRejected(true);
-
-      if (error.code === -32002) setPending(true);
-
-      if (error.code === 4003) setWeb3NotDetected(true);
+    
+      if (error.code === 4001) {close(false) ; setError({isOpen : true, message : `${error.message}`, type : 'error'});}
+      else if (error.code === -32002) {close(false) ; setError({isOpen : true, message : `${error.message}`, type : 'error'});}
+      else if (error.code === 4003) {close(false) ; setError({isOpen : true, message : `${error.message}`, type : 'error'});}
+      else {close(false) ; setError({isOpen : false, message : ``, type : false});}
     }
 }

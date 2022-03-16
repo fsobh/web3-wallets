@@ -1,7 +1,7 @@
 import Fortmatic from 'fortmatic';
 
 import Web3 from 'web3'
-export default async function connectFormatic(current,set) {
+export default async function connectFormatic(current,set, setError, close) {
     try {
     
       if (!current.formaticOptions.key || !current.formaticOptions.network)
@@ -10,6 +10,8 @@ export default async function connectFormatic(current,set) {
 
       const fm = new Fortmatic(current.formaticOptions.key , current.formaticOptions.network);
 
+      close(false)
+      setError({isOpen:true})
       window.web3 = new Web3(fm.getProvider());
   
       // if (await fm.user.isLoggedIn()  && disconnect){
@@ -28,9 +30,14 @@ export default async function connectFormatic(current,set) {
       //   return
       // }
       //if()
-     
-      fm.user.login().then(async () => {
 
+    
+     
+      await fm.user.login().then(async () => {
+
+     
+          
+        
 
         const network = await window.web3.eth.getChainId()
 
@@ -59,12 +66,17 @@ export default async function connectFormatic(current,set) {
                 Connector: window.web3,
               })
               );
-        })
 
+
+              
+            })
+
+            setError({isOpen:false})
+            close(true)
       }).catch((e)=>{ 
         
-        console.error(e);
-
+        
+        console.log(e)
         set({
           ...current,
           account: false,
@@ -73,6 +85,9 @@ export default async function connectFormatic(current,set) {
           protocal: false,
           Connector: false,
         });
+
+        close(false); 
+        setError({isOpen : true, message : `${e.message}`, type : 'error'});
         
         })
     
@@ -96,7 +111,7 @@ export default async function connectFormatic(current,set) {
         }
       });
     } catch (error) {
-
+  
           set({
             ...current,
             account: false,
@@ -105,6 +120,10 @@ export default async function connectFormatic(current,set) {
             protocal: false,
             Connector: false,
           });
+        
+          close(false) ; 
+          setError({isOpen : false});
+          
       
     }
   }
