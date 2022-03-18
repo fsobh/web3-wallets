@@ -1,5 +1,6 @@
-import { WalletLinkConnector } from "@web3-react/walletlink-connector";
+import CoinbaseWalletSDK from '@coinbase/wallet-sdk'
 import Web3 from 'web3'
+import  fetchNetworkNameByID  from '../Utils';
 
 async function listenCoinbaseAccount(ethereum, current,set){
 
@@ -10,40 +11,44 @@ try {
 
  const web3 = new Web3(ethereum)
 
-//  ethereum.on('eth_requestAccounts').then(async (accounts) => {
+ ethereum.enable().then(async (accounts) => {
 
-//   console.log("as")
-//   const network = await web3.eth.getChainId()
-//   let auth = false;
+ 
+  const network = await web3.eth.getChainId()
+  let auth = false;
 
-//   if (current.allowedNetworks.includes(network))
-//       auth = true; 
+  if (current.allowedNetworks.includes(network))
+      auth = true; 
     
   
-//     if (accounts && accounts[0])
-//       set({
-//           ...current,
-//           account: accounts[0],
-//           selectedNetwork: network,
-//           isAuthenticated: auth,
-//           protocal: "coinbase",
-//           Connector: ethereum,
-//       });
-//     else 
-//       set({
-//         ...current,
-//         account: false,
-//         selectedNetwork: false,
-//         isAuthenticated: false,
-//         protocal: false,
-//         Connector: false,
-//       });
-// })
+    if (accounts && accounts[0])
+      set({
+          ...current,
+          account: accounts[0],
+          selectedNetwork: network,
+          networkName : fetchNetworkNameByID(network),
+          isAuthenticated: auth,
+          protocal: "coinbase",
+          Connector: ethereum,
+      });
+    else 
+      set({
+        ...current,
+        account: false,
+        selectedNetwork: false,
+        networkName : false,
+        isAuthenticated: false,
+        protocal: false,
+        Connector: false,
+      });
+})
+
+
 
 
 
 ethereum.on('chainChanged', async function (chainId) {
-  console.log("sd")
+ 
   const chainIDDecimal = parseInt(chainId, 16);
 
   let auth = false;
@@ -58,6 +63,7 @@ ethereum.on('chainChanged', async function (chainId) {
         ...current,
         account: accounts[0],
         selectedNetwork: chainIDDecimal,
+        networkName : fetchNetworkNameByID(chainIDDecimal),
         isAuthenticated: auth,
         protocal: "coinbase",
         Connector: ethereum,
@@ -67,6 +73,7 @@ ethereum.on('chainChanged', async function (chainId) {
          ...current,
          account: false,
          selectedNetwork: false,
+         networkName : false,
          isAuthenticated: false,
          protocal: false,
          Connector: false,
@@ -77,7 +84,6 @@ ethereum.on('chainChanged', async function (chainId) {
 
 ethereum.on('accountsChanged', async function (accounts) {
   
-  console.log("whyyy")
   const network = await web3.eth.getChainId()
   let auth = false;
 
@@ -105,14 +111,15 @@ ethereum.on('accountsChanged', async function (accounts) {
         });
 });
 
-window.addEventListener("beforeunload", (ev) => {
+window.addEventListener("beforeunload", async (ev) => {
   
-        ethereum.deactivate();
+        await ethereum.disconnect();
 
         set({
             ...current,
             account: false,
             selectedNetwork: false,
+            networkName : false,
             isAuthenticated: false,
             protocal: false,
             Connector: false,
@@ -128,6 +135,7 @@ window.addEventListener("beforeunload", (ev) => {
     account: false,
     selectedNetwork: false,
     isAuthenticated: false,
+    networkName : false,
     protocal: false,
     Connector: false,
 });
@@ -136,36 +144,38 @@ window.addEventListener("beforeunload", (ev) => {
 
 
 }
-export default async function connectCoinBaseWallet(current,set){
+export default async function connectCoinBaseWallet(current,set,disconnect = false){
 
 try {
-  
-const APP_NAME = 'Your APP'
+
+const APP_NAME = 'My Awesome App'
+const APP_LOGO_URL = 'https://example.com/logo.png'
 const DEFAULT_ETH_JSONRPC_URL = 'https://mainnet.infura.io/v3/29697ff0dc574effbd5f5e104a845ed0'
+const DEFAULT_CHAIN_ID = 1
 
-
-// Initialize WalletLink
 // Initialize Coinbase Wallet SDK
-const coinbaseWallet = new WalletLinkConnector({
+ const coinbaseWallet = new CoinbaseWalletSDK({
   appName: APP_NAME,
-  supportedChainIds: current.allowedNetworks,
-  url : DEFAULT_ETH_JSONRPC_URL
+  appLogoUrl: APP_LOGO_URL,
+  darkMode: false
 })
 
 
 
-await coinbaseWallet.activate().then(async (provider)=> {
+
+  if(disconnect)
+    return coinbaseWallet.disconnect()
+
+    
 
 
-  
+    const ethereum = coinbaseWallet.makeWeb3Provider(DEFAULT_ETH_JSONRPC_URL, DEFAULT_CHAIN_ID)
 
-  await listenCoinbaseAccount(await coinbaseWallet.getProvider(),current,set)
-      
+   
 
-  
+    await listenCoinbaseAccount(ethereum,current,set)
 
 
-})
 // Initialize a Web3 Provider object
 //const ethereum = coinbaseWallet.makeWeb3Provider(DEFAULT_ETH_JSONRPC_URL, DEFAULT_CHAIN_ID)
 

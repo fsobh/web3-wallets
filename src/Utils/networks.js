@@ -1,4 +1,5 @@
 export default [
+   
     {
       "name": "Ethereum Mainnet",
       "chain": "ETH",
@@ -31,6 +32,8 @@ export default [
         }
       ]
     },
+
+
     {
       "name": "Optimism",
       "chain": "ETH",
@@ -55,6 +58,8 @@ export default [
         }
       ]
     },
+
+
     {
       "name": "Gnosis Chain (formerly xDai)",
       "chain": "Gnosis",
@@ -90,6 +95,7 @@ export default [
         }
       ]
     },
+
     {
       "name": "Smart Bitcoin Cash",
       "chain": "smartBCH",
@@ -110,6 +116,7 @@ export default [
       "chainId": 10000,
       "networkId": 10000
     },
+
     {
       "name": "QuarkChain Mainnet Root",
       "chain": "QuarkChain",
@@ -127,6 +134,7 @@ export default [
       "chainId": 100000,
       "networkId": 100000
     },
+    
     {
       "name": "QuarkChain Mainnet Shard 0",
       "chain": "QuarkChain",

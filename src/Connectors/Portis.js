@@ -18,42 +18,42 @@ const listenPortisAccount = async (portis,web3,current,set) => {
      
       });
       
-      await portis.onLogin(async (walletAddress, email, reputation) => {
+      //  portis.onLogin(async (walletAddress, email, reputation) => {
  
         
-        set({
-          ...current,
-          account: walletAddress,
-          isAuthenticated: true,
-          protocal: "portis",
-          Connector: web3.eth,
-        });
+      //   set({
+      //     ...current,
+      //     account: walletAddress,
+      //     isAuthenticated: true,
+      //     protocal: "portis",
+      //     Connector: web3.eth,
+      //   });
   
-        const network = await web3.eth.getChainId()
+      //   const network = await web3.eth.getChainId()
   
-        if (!current.allowedNetworks.includes(network)){
-          //must be on mainnet or Testnet
-          set({
-            ...current,
-            account: walletAddress,
-            selectedNetwork: network,
-            isAuthenticated: false,
-            protocal: "portis",
-            Connector: web3.eth,
-          });
-        }
-        else
-          web3.eth.getChainId().then((id)=> set({
-            ...current,
-            account: walletAddress,
-            selectedNetwork: id,
-            isAuthenticated: false,
-            protocal: "portis",
-            Connector: web3.eth,
-          }));
+      //   if (!current.allowedNetworks.includes(network)){
+      //     //must be on mainnet or Testnet
+      //     set({
+      //       ...current,
+      //       account: walletAddress,
+      //       selectedNetwork: network,
+      //       isAuthenticated: false,
+      //       protocal: "portis",
+      //       Connector: web3.eth,
+      //     });
+      //   }
+      //   else
+      //     web3.eth.getChainId().then((id)=> set({
+      //       ...current,
+      //       account: walletAddress,
+      //       selectedNetwork: id,
+      //       isAuthenticated: false,
+      //       protocal: "portis",
+      //       Connector: web3.eth,
+      //     }));
   
           
-      }).catch((e)=>{consolee.log("ohfukkkk")})
+      // }).catch((e)=>{consolee.log("ohfukkkk")})
   
       portis.onLogout(() => {
         
@@ -108,35 +108,49 @@ const listenPortisAccount = async (portis,web3,current,set) => {
   
   }
   
-  export default async function connectPortis(current,set) {
+  export default async function connectPortis(current,set, setError,close, disconnect = false) {
+   
+
     try {
      
       if (!current.portisOptions.key || !current.portisOptions.network)
         throw new Error("Key or Network not provided");
         
-      const portis = new Portis(current.portisOptions.key, current.portisOptions.network);
+      let portis = new Portis(current.portisOptions.key, current.portisOptions.network,{registerPageByDefault:true});
+
+
       const web3 = new Web3(portis.provider);
+
+
   
       if(web3 && web3.eth){
-  
-      //   if (disconnect && props.authenticated && (await portis.isLoggedIn()).result){
-  
-      //     await portis.logout()
-  
-      //     set({
-      //       ...current,
-      //       account: false,
-      //       selectedNetwork: false,
-      //       isAuthenticated: false,
-      //       protocal: false,
-      //       Connector: false,
-      //     });
-        
-      // }
         
   
-        web3.eth.getAccounts().then(async(accounts)=> {
+        if (disconnect){
+  
+          await portis.logout()
+  
+          set({
+            ...current,
+            account: false,
+            selectedNetwork: false,
+            isAuthenticated: false,
+            protocal: false,
+            Connector: false,
+          });
+
+          close(true)
+          setError({isOpen:false})
+
+          return
+        
+      }
+        
+ 
+        const accounts = await web3.eth.getAccounts()
          
+        close(false)
+        setError({isOpen:true})
           
   
           if(accounts && accounts[0])
@@ -177,9 +191,14 @@ const listenPortisAccount = async (portis,web3,current,set) => {
             }));
     
          
-          await listenPortisAccount(portis,web3,current,set);
-    
-        window.addEventListener("beforeunload", async (ev) => {
+          await listenPortisAccount(portis,web3,current,set)
+            
+          }
+
+          close(false)
+          setError({isOpen:false})
+     
+           window.addEventListener("beforeunload", async (ev) => {
         
           await portis.logout()
     
@@ -193,21 +212,16 @@ const listenPortisAccount = async (portis,web3,current,set) => {
           });
           
         });
-          
-          
-          }
-      
-      
-        }).finally(()=>{
-          close(false)
-          setError({isOpen:false})
-        })
   
       }
   
-  
-    } catch (error) {
      
-    }
+    } catch (error) {
+        close(false); 
+        setError({isOpen : true, message : `${error.message}`, type : 'error'});
+      }
+
+
+   }
   
-  }
+  

@@ -1,6 +1,5 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { Fragment, useState} from 'react'
 import styles from './styles/buttons.module.css'
-import { fetchNetworkNameByID } from '../Utils/NetworkUtil';
 import {
   connectFormatic,
   connectMetaMask,
@@ -21,7 +20,7 @@ import {
   Portis
 } from '../assets/index'
 import { Modal, GeneralModal } from "./Modal";
-
+import  fetchNetworkNameByID  from '../Utils';
 
 export const WalletButton = () => {
 
@@ -34,12 +33,18 @@ export const WalletButton = () => {
     {img:Portis,text:'Portis'},
     // {img:ConnectWalletIconsw3,text:'Ledger'},
     // {img:TrezorLogo,text:'Trezor'},
-  ]
+]
   const [connectedWallet, setWallet] = React.useContext(UserContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [generalModalSettings, setGMSettings] = useState(false)
 
+  const [networkName, setNetworkName] = useState('')
+  const [loading, setLoading] = useState(false)
+
   const handleWalletSelect = async (i) => {
+    try {
+      
+   
     switch (i){
       case 0 : {
         return await connectMetaMask(connectedWallet, setWallet,setGMSettings,setIsModalOpen);
@@ -48,7 +53,7 @@ export const WalletButton = () => {
       return await connectWalletConnect(connectedWallet, setWallet);
       }
       case 2 : {
-      return  await connectCoinBaseWallet(connectedWallet, setWallet,setGMSettings,setIsModalOpen);
+      return  await connectCoinBaseWallet(connectedWallet, setWallet);
       }
       case 3 : { 
       return await connectFormatic(connectedWallet, setWallet,setGMSettings,setIsModalOpen);
@@ -60,6 +65,37 @@ export const WalletButton = () => {
          return console.log("none")
 
       }
+    } catch (error) {
+      
+    }
+  }
+  const handleWalletDisconnect = async (i) => {
+    try {
+      
+   
+    switch (i){
+      case 'metamask' : {
+        return 
+      }
+      case 'walletconnect' : {
+      return await connectWalletConnect(connectedWallet, setWallet,true);
+      }
+      case 'coinbase' : {
+      return  await connectCoinBaseWallet(connectedWallet, setWallet,setGMSettings,setIsModalOpen,true);
+      }
+      case 'formatic' : { 
+      return await connectFormatic(connectedWallet, setWallet,setGMSettings,setIsModalOpen, true);
+      }
+      case 'portis' :  {
+      return await connectPortis(connectedWallet, setWallet,setGMSettings,setIsModalOpen,true);
+      }
+      default:
+         return console.log("none")
+
+      }
+    } catch (error) {
+      
+    }
   }
   const onWalletSelect = async (i) =>
      connectedWallet.account && connectedWallet.isAuthenticated &&
@@ -74,6 +110,31 @@ export const WalletButton = () => {
     setGMSettings({...generalModalSettings, isOpen : false})
   };
 
+  React.useEffect(()=> {
+    setLoading(true)
+    if(connectedWallet.selectedNetwork){
+
+        const fetchNetName = async () => {
+
+          const ll = await fetchNetworkNameByID(connectedWallet.selectedNetwork);
+
+          if (ll)
+          {
+            
+            setNetworkName(ll);
+          
+          }
+          setLoading(false);
+        }
+
+
+    fetchNetName();
+
+  }
+
+
+  },[connectedWallet.selectedNetwork]);
+ 
   return (
     <Fragment>
 
@@ -87,13 +148,13 @@ export const WalletButton = () => {
       <Modal open={isModalOpen} onClose={handleCloseWalletModal} account = {connectedWallet.account}>
             <Modal.ModalContent>
 
-            {connectedWallet.account && connectedWallet.isAuthenticated &&
+            {connectedWallet.account && connectedWallet.isAuthenticated  &&
           (typeof connectedWallet.account === 'string' || connectedWallet.account instanceof String) ?
             <div   className={styles.accountInfoContainer}>
+
               <div className={styles.accountInfoheader} >
-                      
-                          
-              {connectedWallet.protocal ?
+                                 
+{connectedWallet.protocal ?
 
         connectedWallet.protocal == "metamask" ?
 
@@ -131,15 +192,27 @@ export const WalletButton = () => {
                       
                           
                       
-                      <div className={styles.pricingItempricing}><span  className={styles.thin}>Connected network : </span> {fetchNetworkNameByID(connectedWallet.selectedNetwork).name} </div>
+                      <div className={styles.pricingItempricing}>
+                        <span  className={styles.thin}>
+                          Connected network : 
+
+                          </span> {networkName} </div>
                       
             </div>
             <div className={styles.accountInfoheader} >
                       
                           
-                      {/**Cant do this for meta mask (display banner), walletconnect : killsession() - coinbase : close() - formatic & portis (thru sdk) ==> logout() */}
-                      {/* <div className={styles.pricingItempricing}> <button onClick= {async ()=> {await connectedWallet.Connector.logout()}} className={styles.disconnectButton }>Disconnect</button></div>
-                        */}
+                      {/**Cant do this for meta mask (display banner),
+                       *  walletconnect : killsession()
+                       * coinbase : close() 
+                       *  formatic & portis (thru sdk) ==> logout() */}
+                      <div className={styles.pricingItempricing}>
+                         <button onClick= {async ()=> {await connectCoinBaseWallet(connectedWallet, setWallet, true) }} 
+                         className={styles.disconnectButton }>
+                           Disconnect
+                           </button>
+                        </div>
+                       
             </div>
             
 
@@ -168,7 +241,7 @@ export const WalletButton = () => {
 
             {
               connectedWallet.selectedNetwork && connectedWallet.isAuthenticated ?
-                <div className={styles.griditemstart}>{fetchNetworkNameByID(connectedWallet.selectedNetwork).name || 'Private Network'}</div>
+                <div className={styles.griditemstart}>{ networkName }</div>
 
                 : connectedWallet.selectedNetwork && !connectedWallet.isAuthenticated ?
                   <div className={styles.griditemstart}>Network not supported</div>

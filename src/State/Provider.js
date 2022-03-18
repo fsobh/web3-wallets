@@ -1,6 +1,7 @@
 import React, { useState, createContext } from 'react';
 export const UserContext = createContext();
 export const UserInfoProvider = (props) => {
+  
   const [connectedWallet, setWallet] = useState({
     account: null,
     selectedNetwork: false,
@@ -8,17 +9,17 @@ export const UserInfoProvider = (props) => {
     protocal: false,
     Connector: false,
     allowedNetworks : [1,4],
-
+    logout : false,
     portisOptions   : {
 
-     key :  'cvbcvbcvbcvb', 
-     network :  'mainnet'
-    },
-    formaticOptions : {
-
-      key :  'pk_test_ghjghj', 
-      network :  'rinkeby'
-    }
+      key :  '74a7ec07-631d-4579-93d1-7bfa6b1a2e03', 
+      network :  'mainnet'
+     },
+     formaticOptions : {
+ 
+       key :  'pk_test_25E2ADA8B773A4CB', 
+       network :  'rinkeby'
+     }
 
 
   });

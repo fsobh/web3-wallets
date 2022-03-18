@@ -131,7 +131,7 @@ async function listenWCAccount(connector,current,set) {
    });
 }
 
-async function connectWalletConnect(current,set) {
+async function connectWalletConnect(current,set,disconnect) {
     try {
 
 
@@ -141,21 +141,21 @@ async function connectWalletConnect(current,set) {
         qrcodeModal: QRCodeModal
       });
 
-      // if (connector.connected && disconnect && current.isAuthenticated){ //on disconnect button click
-      //    await connector.killSession()
+      if (connector.connected && disconnect ){ //on disconnect button click
+         await connector.killSession()
 
-      //    set({
-      //     ...current,
-      //     account: false,
-      //     selectedNetwork: false,
-      //     isAuthenticated: false,
-      //     protocal: false,
-      //     Connector: false,
-      //   });
+         set({
+          ...current,
+          account: false,
+          selectedNetwork: false,
+          isAuthenticated: false,
+          protocal: false,
+          Connector: false,
+        });
         
-      //   return
+        return
 
-      //   }
+        }
 
       //JUST INCASE, proper handling is at end of listenWCAccount() function
       if (connector.connected)

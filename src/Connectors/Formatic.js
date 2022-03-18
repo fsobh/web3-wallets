@@ -1,7 +1,7 @@
 import Fortmatic from 'fortmatic';
 
 import Web3 from 'web3'
-export default async function connectFormatic(current,set, setError, close) {
+export default async function connectFormatic(current,set, setError, close, disconnect = false) {
     try {
     
       if (!current.formaticOptions.key || !current.formaticOptions.network)
@@ -9,27 +9,30 @@ export default async function connectFormatic(current,set, setError, close) {
 
 
       const fm = new Fortmatic(current.formaticOptions.key , current.formaticOptions.network);
-
-      close(false)
-      setError({isOpen:true})
       window.web3 = new Web3(fm.getProvider());
   
-      // if (await fm.user.isLoggedIn()  && disconnect){
+      if (await fm.user.isLoggedIn()  && disconnect){
   
-      //   fm.user.logout().then(() => {
+        fm.user.logout().then(() => {
               
-      //     set({
-      //       ...current,
-      //       account: false,
-      //       selectedNetwork: false,
-      //       isAuthenticated: false,
-      //       protocal: false,
-      //       Connector: false,
-      //     });
-      //   });
-      //   return
-      // }
-      //if()
+          set({
+            ...current,
+            account: false,
+            selectedNetwork: false,
+            isAuthenticated: false,
+            protocal: false,
+            Connector: false,
+          });
+        });
+
+        close(true)
+        setError({isOpen:false})
+        return
+      }
+      
+      close(false)
+      setError({isOpen:true})
+
 
     
      
