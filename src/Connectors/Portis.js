@@ -116,7 +116,7 @@ const listenPortisAccount = async (portis,web3,current,set) => {
       if (!current.portisOptions.key || !current.portisOptions.network)
         throw new Error("Key or Network not provided");
         
-      let portis = new Portis(current.portisOptions.key, current.portisOptions.network,{registerPageByDefault:true});
+      let portis = new Portis(current.portisOptions.key, current.portisOptions.network);
 
 
       const web3 = new Web3(portis.provider);
@@ -126,25 +126,25 @@ const listenPortisAccount = async (portis,web3,current,set) => {
       if(web3 && web3.eth){
         
   
-      //   if (disconnect){
+        if (disconnect){
   
-      //     await portis.logout()
+          await portis.logout()
   
-      //     set({
-      //       ...current,
-      //       account: false,
-      //       selectedNetwork: false,
-      //       isAuthenticated: false,
-      //       protocal: false,
-      //       Connector: false,
-      //     });
+          set({
+            ...current,
+            account: false,
+            selectedNetwork: false,
+            isAuthenticated: false,
+            protocal: false,
+            Connector: false,
+          });
 
-      //     close(true)
-      //     setError({isOpen:false})
+          close(true)
+          setError({isOpen:false})
 
-      //     return
+          return
         
-      // }
+      }
         
  
         const accounts = await web3.eth.getAccounts()
@@ -217,6 +217,7 @@ const listenPortisAccount = async (portis,web3,current,set) => {
   
      
     } catch (error) {
+      console.log(error);
         close(false); 
         setError({isOpen : true, message : `${error.message}`, type : 'error'});
       }

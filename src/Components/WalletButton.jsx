@@ -75,7 +75,7 @@ export const WalletButton = () => {
    
     switch (i){
       case 'metamask' : {
-        return 
+        return  await connectMetaMask(connectedWallet, setWallet,setGMSettings,setIsModalOpen,true)
       }
       case 'walletconnect' : {
       return await connectWalletConnect(connectedWallet, setWallet,true);

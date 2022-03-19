@@ -10,11 +10,16 @@ export default async function connectFormatic(current,set, setError, close, disc
 
       const fm = new Fortmatic(current.formaticOptions.key , current.formaticOptions.network);
       window.web3 = new Web3(fm.getProvider());
+
+      close(false)
+      setError({isOpen:true})
   
       if (await fm.user.isLoggedIn()  && disconnect){
   
         fm.user.logout().then(() => {
               
+        close(true)
+        setError({isOpen:false})
           set({
             ...current,
             account: false,
@@ -25,13 +30,11 @@ export default async function connectFormatic(current,set, setError, close, disc
           });
         });
 
-        close(true)
-        setError({isOpen:false})
+        
         return
       }
       
-      close(false)
-      setError({isOpen:true})
+      
 
 
     

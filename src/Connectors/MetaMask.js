@@ -38,35 +38,22 @@ async function listenMMAccount(Ethereum, current,set) {
 
   try {
     
-  
-
- 
     window.ethereum.on('accountsChanged', async function (accounts) {
-      console.log(accounts);
+      
 
       const network = await Ethereum.eth.getChainId();
     
+      let auth = false;
 
-      if (!current.allowedNetworks.includes(network)) {
-        //must be on mainnet or Testnet
-        
-        set({
-          account: accounts[0],
-          selectedNetwork: network,
-         
-          isAuthenticated: false,
-          protocal: 'metamask',
-          Connector: window.ethereum,
-        });
-       
-      } else {
+      if (current.allowedNetworks.includes(network))
+          auth = true; 
         
         if (accounts && accounts[0]) 
           set({
               ...current,
               account: accounts[0],
               selectedNetwork: network,
-              isAuthenticated: true,
+              isAuthenticated: auth,
               protocal: 'metamask',
               Connector: window.ethereum,
           });
@@ -75,83 +62,91 @@ async function listenMMAccount(Ethereum, current,set) {
               ...current,
               account: false,
               selectedNetwork: false,
-              networkName : false,
               isAuthenticated: false,
               protocal: false,
               Connector: false,
             });
         }
-      }
+      
     });
+
 
     window.ethereum.on('chainChanged', async function (chainId) {
       
       const chainIDDecimal = parseInt(chainId, 16); 
       const addy = await Ethereum.eth.getAccounts();
-      const networkName = await Ethereum.eth.net.getNetworkType()
+     
 
-      if (!current.allowedNetworks.includes(chainIDDecimal)) {
-        
-          set({
-            ...current,
-            account: addy[0],
-            selectedNetwork: chainIDDecimal,
-            networkName : networkName,
-            isAuthenticated: false,
-            protocal: 'metamask',
-            Connector: window.ethereum, 
-          });
- 
-      } else {
-          
-        set({
-            ...current,
-            account: addy[0],
-            selectedNetwork: chainIDDecimal,
-            networkName : networkName,
-            isAuthenticated: true,
-            protocal: 'metamask',
-            Connector: window.ethereum,
-          });
+      let auth = false;
 
-      }
+      if (current.allowedNetworks.includes(chainIDDecimal))
+          auth = true; 
+    
+
+      set({
+          ...current,
+          account: addy[0],
+          selectedNetwork: chainIDDecimal,
+          isAuthenticated: auth,
+          protocal: 'metamask',
+          Connector: window.ethereum,
+      });
+
+      
     });
+
+    window.ethereum.on('disconnect', function () {
+      set({
+        ...current,
+        account: false,
+        selectedNetwork: false,
+        isAuthenticated: false,
+        protocal: false,
+        Connector: false,
+      });
+
+    })
 
   } catch (error) {
     console.log(error)
   }
 }
 
-export default async function connectMetaMask(current,set, setError, close) {
+export default async function connectMetaMask(current,set, setError, close, disconnect = false) {
     try {
 
+      
+      if(disconnect && window.ethereum){
+        const web3 = new Web3(window.ethereum);
 
+        web3.eth.close()
+     
+      }
+        
 
       const Ethereum = await getWeb3();
-   
 
       if (Ethereum) {
         
-        //this is all the user data we need, and need to track
+
         const addy = await Ethereum.eth.getAccounts();
         const network = await Ethereum.eth.getChainId();
-        const networkName = await Ethereum.eth.net.getNetworkType()
-        let auth = true;
-
-        //TODO : FIX
-        if (!current.allowedNetworks.includes(network)) auth = false;
-        //add check here for chain
+     
+        let auth = false;
+       
+        if (current.allowedNetworks.includes(network)) 
+          auth = true;
+     
 
         set({
           ...current,
           account: addy[0],
           selectedNetwork: network,
-          networkName : networkName,
           isAuthenticated: auth,
           protocal: 'metamask',
           Connector: window.ethereum,
           
-        })
+        });
        
 
         await listenMMAccount(Ethereum, current,set).finally(()=> setError({isOpen : false, message : ``, type : false}));
