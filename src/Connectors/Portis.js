@@ -126,25 +126,25 @@ const listenPortisAccount = async (portis,web3,current,set) => {
       if(web3 && web3.eth){
         
   
-        if (disconnect){
+      //   if (disconnect){
   
-          await portis.logout()
+      //     await portis.logout()
   
-          set({
-            ...current,
-            account: false,
-            selectedNetwork: false,
-            isAuthenticated: false,
-            protocal: false,
-            Connector: false,
-          });
+      //     set({
+      //       ...current,
+      //       account: false,
+      //       selectedNetwork: false,
+      //       isAuthenticated: false,
+      //       protocal: false,
+      //       Connector: false,
+      //     });
 
-          close(true)
-          setError({isOpen:false})
+      //     close(true)
+      //     setError({isOpen:false})
 
-          return
+      //     return
         
-      }
+      // }
         
  
         const accounts = await web3.eth.getAccounts()

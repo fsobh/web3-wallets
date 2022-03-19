@@ -59,7 +59,7 @@ export const WalletButton = () => {
       return await connectFormatic(connectedWallet, setWallet,setGMSettings,setIsModalOpen);
       }
       case 4 :  {
-      return await connectPortis(connectedWallet, setWallet,setGMSettings,setIsModalOpen);
+      return await connectPortis(connectedWallet, setWallet,setGMSettings,setIsModalOpen, false);
       }
       default:
          return console.log("none")
@@ -148,7 +148,7 @@ export const WalletButton = () => {
       <Modal open={isModalOpen} onClose={handleCloseWalletModal} account = {connectedWallet.account}>
             <Modal.ModalContent>
 
-            {connectedWallet.account && connectedWallet.isAuthenticated  &&
+            {connectedWallet.account && 
           (typeof connectedWallet.account === 'string' || connectedWallet.account instanceof String) ?
             <div   className={styles.accountInfoContainer}>
 
@@ -207,7 +207,7 @@ export const WalletButton = () => {
                        * coinbase : close() 
                        *  formatic & portis (thru sdk) ==> logout() */}
                       <div className={styles.pricingItempricing}>
-                         <button onClick= {async ()=> {await connectCoinBaseWallet(connectedWallet, setWallet, true) }} 
+                         <button onClick= {async ()=> {await handleWalletDisconnect(connectedWallet.protocal)}} 
                          className={styles.disconnectButton }>
                            Disconnect
                            </button>
