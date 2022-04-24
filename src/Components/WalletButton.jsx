@@ -24,41 +24,40 @@ import  fetchNetworkNameByID  from '../Utils';
 
 export const WalletButton = () => {
 
+
   const whoWeData = [
-    {img:ConnectWalletIconsw1,text:'MetaMask'},
-    {img:ConnectWalletIconsw2,text:'Wallet Connect'},
-    {img:Coinbase,text:'Coinbase Wallet'},
-    
-    {img:Formatic,text:'Formatic'},
-    {img:Portis,text:'Portis'},
+    {img:ConnectWalletIconsw1,text:'MetaMask', id : 'metamask'},
+    {img:ConnectWalletIconsw2,text:'Wallet Connect' , id : 'walletconnect'},
+    {img:Coinbase,text:'Coinbase Wallet', id : "coinbase"},
+    {img:Formatic,text:'Formatic', id : "formatic"},
+    {img:Portis,text:'Portis', id : "portis"},
     // {img:ConnectWalletIconsw3,text:'Ledger'},
     // {img:TrezorLogo,text:'Trezor'},
 ]
   const [connectedWallet, setWallet] = React.useContext(UserContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [generalModalSettings, setGMSettings] = useState(false)
-
   const [networkName, setNetworkName] = useState('')
-  const [loading, setLoading] = useState(false)
+
 
   const handleWalletSelect = async (i) => {
     try {
       
    
     switch (i){
-      case 0 : {
+      case 'metamask': {
         return await connectMetaMask(connectedWallet, setWallet,setGMSettings,setIsModalOpen);
       }
-      case 1 : {
+      case 'walletconnect' : {
       return await connectWalletConnect(connectedWallet, setWallet);
       }
-      case 2 : {
+      case 'coinbase' : {
       return  await connectCoinBaseWallet(connectedWallet, setWallet);
       }
-      case 3 : { 
+      case 'formatic' : { 
       return await connectFormatic(connectedWallet, setWallet,setGMSettings,setIsModalOpen);
       }
-      case 4 :  {
+      case 'portis' :  {
       return await connectPortis(connectedWallet, setWallet,setGMSettings,setIsModalOpen, false);
       }
       default:
@@ -111,7 +110,7 @@ export const WalletButton = () => {
   };
 
   React.useEffect(()=> {
-    setLoading(true)
+ 
     if(connectedWallet.selectedNetwork){
 
         const fetchNetName = async () => {
@@ -124,7 +123,7 @@ export const WalletButton = () => {
             setNetworkName(ll);
           
           }
-          setLoading(false);
+       
         }
 
 
@@ -217,13 +216,12 @@ export const WalletButton = () => {
             
 
             </div>: 
-            whoWeData &&
-                    whoWeData.map((item, i) => (
-                      <>
+            connectedWallet.wallets && Object.keys(connectedWallet.wallets).map((item, i) =>  (
+                      connectedWallet   ? <>
                       <div
                         key={i}
                         className={styles.pricingItem}
-                        onClick={async () => await onWalletSelect(i)}>
+                        onClick={async () => await onWalletSelect(item.id)}>
                           
                         <img src={item.img} width="40" className={styles.walicon} alt="" />
                         <div className={styles.pricingItempricing}> {item.text} </div>
@@ -231,7 +229,7 @@ export const WalletButton = () => {
                       </div>
                       <hr className={styles.bord}/>
                       
-                      </>
+                      </> : null
                     )) }
             </Modal.ModalContent>
             

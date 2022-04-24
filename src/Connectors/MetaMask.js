@@ -96,6 +96,7 @@ async function listenMMAccount(Ethereum, current,set) {
     });
 
     window.ethereum.on('disconnect', function () {
+      console.log("ASAA")
       set({
         ...current,
         account: false,
