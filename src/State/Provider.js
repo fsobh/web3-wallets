@@ -1,11 +1,7 @@
 import React, { useState, createContext } from 'react';
 import {
-  MetamaskTop,
-  WalletConnectTop,
-  ConnectWalletIconswallet,
   ConnectWalletIconsw1,
 	ConnectWalletIconsw2,
-  TrezorLogo,
   Coinbase,
   Formatic,
   Portis
@@ -15,37 +11,35 @@ export const UserContext = createContext();
 export const UserInfoProvider = ({children, options}) => {
 
   
-  const [WalletOptions, setOptions] = React.useState({
-    metamask :  {img:ConnectWalletIconsw1,text:'MetaMask', id : 'metamask'},
-    walletconnect : {img:ConnectWalletIconsw2,text:'Wallet Connect' , id : 'walletconnect'},
-    coinbase : {img:Coinbase,text:'Coinbase Wallet', id : "coinbase"},
-    formatic : {img:Formatic,text:'Formatic', id : "formatic"},
-    portis :   {img:Portis,text:'Portis', id : "portis"},
-    // {img:ConnectWalletIconsw3,text:'Ledger'},
-    // {img:TrezorLogo,text:'Trezor'},
-  })
-  if (options && Array.isArray(options)  ){
+  let WalletOptions = [
+      {img:ConnectWalletIconsw1,text:'MetaMask', id : 'metamask'},
+      {img:ConnectWalletIconsw2,text:'Wallet Connect' , id : 'walletconnect'},
+      {img:Coinbase,text:'Coinbase Wallet', id : "coinbase"},
+      {img:Formatic,text:'Formatic', id : "formatic"},
+      {img:Portis,text:'Portis', id : "portis"},
+ 
+  ]
+  let selectedWallets = []
 
+ 
+  if (options && Array.isArray(options))
+  {
+
+    
       options.forEach((item) => {
-          
-
-        if (
-          typeof WalletOptions === 'object' &&
-          !Array.isArray(WalletOptions) &&
-          WalletOptions !== null
-      ) {
-         
-          if(!WalletOptions.hasOwnProperty(item)){
-            
-           
-            delete WalletOptions[item.id]
-          }
-
-      }
-          
+       
+        let found = WalletOptions.find(element => element.id === item);
+        
+        if(found)
+          selectedWallets.push(found)
+       
+        if(selectedWallets.length === 0)
+          selectedWallets = WalletOptions;
 
       })
-
+  }
+  else{
+    selectedWallets = WalletOptions;
   }
   
   const [connectedWallet, setWallet] = useState({
@@ -64,7 +58,7 @@ export const UserInfoProvider = ({children, options}) => {
        key :  'pk_test_25E2ADA8B773A4CB', 
        network :  'rinkeby'
      },
-     wallets : WalletOptions,
+     wallets : selectedWallets,
     
   });
 

@@ -41,6 +41,8 @@ export const WalletButton = () => {
 
 
   const handleWalletSelect = async (i) => {
+
+   
     try {
       
    
@@ -110,6 +112,8 @@ export const WalletButton = () => {
   };
 
   React.useEffect(()=> {
+
+    
  
     if(connectedWallet.selectedNetwork){
 
@@ -216,7 +220,7 @@ export const WalletButton = () => {
             
 
             </div>: 
-            connectedWallet.wallets && Object.keys(connectedWallet.wallets).map((item, i) =>  (
+            connectedWallet.wallets && connectedWallet.wallets.map((item, i) =>  (
                       connectedWallet   ? <>
                       <div
                         key={i}

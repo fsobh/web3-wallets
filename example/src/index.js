@@ -5,6 +5,6 @@ import ReactDOM from 'react-dom'
 import App from './App'
 
 ReactDOM.render(
-<WalletProvider options = {['metamask']}>
+<WalletProvider >
     <App />
 </WalletProvider>, document.getElementById('root'))
