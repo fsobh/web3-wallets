@@ -5,6 +5,6 @@ import ReactDOM from 'react-dom'
 import App from './App'
 
 ReactDOM.render(
-<WalletProvider >
+<WalletProvider allowedWallets={[]} allowedNetworks={[]}>
     <App />
 </WalletProvider>, document.getElementById('root'))

@@ -24,16 +24,6 @@ import  fetchNetworkNameByID  from '../Utils';
 
 export const WalletButton = () => {
 
-
-  const whoWeData = [
-    {img:ConnectWalletIconsw1,text:'MetaMask', id : 'metamask'},
-    {img:ConnectWalletIconsw2,text:'Wallet Connect' , id : 'walletconnect'},
-    {img:Coinbase,text:'Coinbase Wallet', id : "coinbase"},
-    {img:Formatic,text:'Formatic', id : "formatic"},
-    {img:Portis,text:'Portis', id : "portis"},
-    // {img:ConnectWalletIconsw3,text:'Ledger'},
-    // {img:TrezorLogo,text:'Trezor'},
-]
   const [connectedWallet, setWallet] = React.useContext(UserContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [generalModalSettings, setGMSettings] = useState(false)

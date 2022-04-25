@@ -8,7 +8,7 @@ import {
 } from '../assets/index'
 
 export const UserContext = createContext();
-export const UserInfoProvider = ({children, options}) => {
+export const UserInfoProvider = ({children, allowedWallets,allowedNetworks}) => {
 
   
   let WalletOptions = [
@@ -22,21 +22,19 @@ export const UserInfoProvider = ({children, options}) => {
   let selectedWallets = []
 
  
-  if (options && Array.isArray(options))
+  if (allowedWallets && Array.isArray(allowedWallets))
   {
-
-    
-      options.forEach((item) => {
+      allowedWallets.forEach((item) => {
        
         let found = WalletOptions.find(element => element.id === item);
         
         if(found)
           selectedWallets.push(found)
-       
-        if(selectedWallets.length === 0)
-          selectedWallets = WalletOptions;
-
       })
+      
+      if(selectedWallets.length === 0)
+         selectedWallets = WalletOptions;
+
   }
   else{
     selectedWallets = WalletOptions;
