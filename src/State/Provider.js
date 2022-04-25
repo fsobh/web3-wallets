@@ -8,7 +8,7 @@ import {
 } from '../assets/index'
 
 export const UserContext = createContext();
-export const UserInfoProvider = ({children, allowedWallets,allowedNetworks}) => {
+export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, formaticOptions, portisOptions}) => {
 
   
   let WalletOptions = [
@@ -20,15 +20,18 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks}) => 
  
   ]
   let selectedWallets = []
-
+  let selectedNetworks = []
  
-  if (allowedWallets && Array.isArray(allowedWallets))
-  {
+  if (allowedWallets && Array.isArray(allowedWallets)){
       allowedWallets.forEach((item) => {
        
         let found = WalletOptions.find(element => element.id === item);
         
         if(found)
+
+          //check if keys and network names were passed in
+
+
           selectedWallets.push(found)
       })
       
@@ -36,9 +39,15 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks}) => 
          selectedWallets = WalletOptions;
 
   }
-  else{
+  else {
     selectedWallets = WalletOptions;
   }
+
+  if (allowedNetworks && Array.isArray(allowedNetworks) && allowedNetworks.length > 0)
+    selectedNetworks = allowedNetworks
+  else 
+    selectedNetworks = [1,4];
+  
   
   const [connectedWallet, setWallet] = useState({
     account: null,
@@ -46,12 +55,12 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks}) => 
     isAuthenticated: false,
     protocal: false,
     Connector: false,
-    allowedNetworks : [1,4],
-    portisOptions   : {
+    allowedNetworks : selectedNetworks,
+    portisOptions   : {  // https://docs.portis.io/#/configuration
       key :  '74a7ec07-631d-4579-93d1-7bfa6b1a2e03', 
       network :  'mainnet'
      },
-    formaticOptions : {
+    formaticOptions : { // https://docs.fortmatic.com/web3-integration/network-configuration#switch-network-on-testnet
  
        key :  'pk_test_25E2ADA8B773A4CB', 
        network :  'rinkeby'
