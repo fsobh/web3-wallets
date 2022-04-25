@@ -21,6 +21,17 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
   ]
   let selectedWallets = []
   let selectedNetworks = []
+  let otherWalletSettings = {
+    portis   : {  // https://docs.portis.io/#/configuration
+
+      key :  '', 
+      network :  'mainnet'
+     },
+    formatic : { // https://docs.fortmatic.com/web3-integration/network-configuration#switch-network-on-testnet
+       key :  '', 
+       network :  'mainnet'
+     },
+  }
  
   if (allowedWallets && Array.isArray(allowedWallets)){
       allowedWallets.forEach((item) => {
@@ -29,18 +40,40 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
         
         if(found)
 
-          //check if keys and network names were passed in
+            switch(found.id){
 
+              case 'formatic': {
 
-          selectedWallets.push(found)
+                if(formaticOptions.key && formaticOptions.network){
+                  otherWalletSettings.formatic = formaticOptions;
+                  selectedWallets.push(found);
+                }
+                break;
+              }
+              case 'portis': {
+                if(portisOptions.key && portisOptions.network){
+                  otherWalletSettings.portis = portisOptions;
+                  selectedWallets.push(found);
+                }
+                break;
+              }
+              default: {
+                selectedWallets.push(found);
+                break;
+              }
+
+            }
       })
       
-      if(selectedWallets.length === 0)
-         selectedWallets = WalletOptions;
-
+      if(selectedWallets.length === 0){
+         
+        selectedWallets = WalletOptions;
+        //check if portis and formatic creds were provided
+      }
   }
   else {
     selectedWallets = WalletOptions;
+    //check if portis and formatic creds were provided
   }
 
   if (allowedNetworks && Array.isArray(allowedNetworks) && allowedNetworks.length > 0)
@@ -56,16 +89,9 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
     protocal: false,
     Connector: false,
     allowedNetworks : selectedNetworks,
-    portisOptions   : {  // https://docs.portis.io/#/configuration
-      key :  '74a7ec07-631d-4579-93d1-7bfa6b1a2e03', 
-      network :  'mainnet'
-     },
-    formaticOptions : { // https://docs.fortmatic.com/web3-integration/network-configuration#switch-network-on-testnet
- 
-       key :  'pk_test_25E2ADA8B773A4CB', 
-       network :  'rinkeby'
-     },
-     wallets : selectedWallets,
+    portisOptions   : otherWalletSettings.portis,
+    formaticOptions : otherWalletSettings.formatic,
+    wallets : selectedWallets,
     
   });
 
