@@ -44,14 +44,14 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
 
               case 'formatic': {
 
-                if(formaticOptions.key && formaticOptions.network){
+                if(formaticOptions && formaticOptions.key && formaticOptions.network){
                   otherWalletSettings.formatic = formaticOptions;
                   selectedWallets.push(found);
                 }
                 break;
               }
               case 'portis': {
-                if(portisOptions.key && portisOptions.network){
+                if(portisOptions && portisOptions.key && portisOptions.network){
                   otherWalletSettings.portis = portisOptions;
                   selectedWallets.push(found);
                 }
@@ -67,24 +67,24 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
       
       if(selectedWallets.length === 0){
 
-
         if(!portisOptions || (!portisOptions.key || !portisOptions.network)){
+
           WalletOptions.pop();
 
           if(!formaticOptions || (!formaticOptions.key || !formaticOptions.network))
-              WalletOptions.pop();
-
-          
+              WalletOptions.pop(); 
         }
         else{
 
-          const _indexFormatic = WalletOptions.indexOf({img:Formatic,text:'Formatic', id : "formatic"});
-          const _indexPortis = WalletOptions.indexOf({img:Portis,text:'Portis', id : "portis"});
+          if(!formaticOptions || (!formaticOptions.key || !formaticOptions.network)) 
+          {
+            const _indexFormatic = WalletOptions.map(function(e) { return e.id; }).indexOf('formatic');
+            const _indexPortis = WalletOptions.map(function(e) { return e.id; }).indexOf('portis');
+            WalletOptions[_indexFormatic] = WalletOptions[_indexPortis];
+            WalletOptions.pop()
 
-          WalletOptions[_indexFormatic] = WalletOptions[_indexPortis];
-          WalletOptions.pop()
-
-        }
+          }
+      }
 
 
          
@@ -95,26 +95,24 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
   else {
 
     if(!portisOptions || (!portisOptions.key || !portisOptions.network)){
+
       WalletOptions.pop();
 
       if(!formaticOptions || (!formaticOptions.key || !formaticOptions.network))
           WalletOptions.pop();
-
-      
     }
     else{
 
-      const _indexFormatic = WalletOptions.indexOf({img:Formatic,text:'Formatic', id : "formatic"});
-      const _indexPortis = WalletOptions.indexOf({img:Portis,text:'Portis', id : "portis"});
-
-     // WalletOptions[_indexFormatic] = WalletOptions[_indexPortis];
-      //WalletOptions.pop()
-
-    }
-
-
+      if(!formaticOptions || (!formaticOptions.key || !formaticOptions.network)) 
+      {
+    
+        const _indexFormatic = WalletOptions.map(function(e) { return e.id; }).indexOf('formatic');
+        const _indexPortis = WalletOptions.map(function(e) { return e.id; }).indexOf('portis');
+        WalletOptions[_indexFormatic] = WalletOptions[_indexPortis];
+        WalletOptions.pop()
+      }
+  }
     selectedWallets = WalletOptions;
-    //check if portis and formatic creds were provided
   }
 
   if (allowedNetworks && Array.isArray(allowedNetworks) && allowedNetworks.length > 0)

@@ -12,8 +12,6 @@ import {
   MetamaskTop,
   WalletConnectTop,
   ConnectWalletIconswallet,
-  ConnectWalletIconsw1,
-	ConnectWalletIconsw2,
   TrezorLogo,
   Coinbase,
   Formatic,
