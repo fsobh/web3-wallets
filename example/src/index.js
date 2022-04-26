@@ -7,12 +7,12 @@ import App from './App'
 ReactDOM.render(
 <WalletProvider allowedWallets={[]} allowedNetworks={[]} 
 formaticOptions={{
-    key : '',
-    network : ''
+    key : 'as',
+    network : 'asas'
 }}
 portisOptions={{
-    key : '',
-    network : ''
+    key : 'asd',
+    network : 'asdd'
 }}
 >
     <App />

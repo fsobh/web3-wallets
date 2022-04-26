@@ -66,12 +66,53 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
       })
       
       if(selectedWallets.length === 0){
+
+
+        if(!portisOptions || (!portisOptions.key || !portisOptions.network)){
+          WalletOptions.pop();
+
+          if(!formaticOptions || (!formaticOptions.key || !formaticOptions.network))
+              WalletOptions.pop();
+
+          
+        }
+        else{
+
+          const _indexFormatic = WalletOptions.indexOf({img:Formatic,text:'Formatic', id : "formatic"});
+          const _indexPortis = WalletOptions.indexOf({img:Portis,text:'Portis', id : "portis"});
+
+          WalletOptions[_indexFormatic] = WalletOptions[_indexPortis];
+          WalletOptions.pop()
+
+        }
+
+
          
         selectedWallets = WalletOptions;
         //check if portis and formatic creds were provided
       }
   }
   else {
+
+    if(!portisOptions || (!portisOptions.key || !portisOptions.network)){
+      WalletOptions.pop();
+
+      if(!formaticOptions || (!formaticOptions.key || !formaticOptions.network))
+          WalletOptions.pop();
+
+      
+    }
+    else{
+
+      const _indexFormatic = WalletOptions.indexOf({img:Formatic,text:'Formatic', id : "formatic"});
+      const _indexPortis = WalletOptions.indexOf({img:Portis,text:'Portis', id : "portis"});
+
+     // WalletOptions[_indexFormatic] = WalletOptions[_indexPortis];
+      //WalletOptions.pop()
+
+    }
+
+
     selectedWallets = WalletOptions;
     //check if portis and formatic creds were provided
   }
