@@ -5,15 +5,8 @@ import ReactDOM from 'react-dom'
 import App from './App'
 
 ReactDOM.render(
-<WalletProvider allowedWallets={['metamask', 'formatic']} allowedNetworks={[]} 
-formaticOptions={{
-    key : 'as',
-    network : 'asas'
-}}
-portisOptions={{
-    key : 'asd',
-    network : 'asdd'
-}}
+<WalletProvider  allowedNetworks={[]} 
+
 >
     <App />
 </WalletProvider>, document.getElementById('root'))
