@@ -8,7 +8,7 @@ import {
 } from '../assets/index'
 
 export const UserContext = createContext();
-export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, formaticOptions, portisOptions}) => {
+export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, formaticOptions, portisOptions, coinbaseOptions}) => {
 
   
   let WalletOptions = [
@@ -128,6 +128,7 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
     protocal: false,
     Connector: false,
     allowedNetworks : selectedNetworks,
+    coinbaseOptions : {},
     portisOptions   : otherWalletSettings.portis,
     formaticOptions : otherWalletSettings.formatic,
     wallets : selectedWallets,

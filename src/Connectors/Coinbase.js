@@ -175,37 +175,6 @@ const DEFAULT_CHAIN_ID = 1
 
     await listenCoinbaseAccount(ethereum,current,set)
 
-
-// Initialize a Web3 Provider object
-//const ethereum = coinbaseWallet.makeWeb3Provider(DEFAULT_ETH_JSONRPC_URL, DEFAULT_CHAIN_ID)
-
-//await listenCoinbaseAccount(ethereum,current,set)
-
-
-
-//  if(ethereum && ethereum.isConnected() && props.authenticated && disconnect){
-
-//   ethereum.disconnect()
-
-//     set({
-//             ...current,
-//             account: false,
-//             selectedNetwork: false,
-//             isAuthenticated: false,
-//             protocal: false,
-//             Connector: false,
-//     });
-//     return
-
-//  }
- 
- 
-
-
-    
-
-
-
 } catch (error) {
   console.log(error)
 }
