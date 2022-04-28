@@ -42,9 +42,19 @@
 | `formaticOptions`  |  `Object`  | **Required if**.  you want formatic as an option for wallet use. ex : `{key : "<you-api-key>", network : "mainnet"}`  |
 | `portisOptions`    |  `Object`  | **Required if**.  you want portis as an option for wallet use. ex : `{key : "<you-api-key>", network : "mainnet"}`  |
 
-### Partial example from this [example app](https://github.com/fsobh/Chainlink-External-Initiator-Template/blob/Dev/app.js)
+### Example
 
 ```javascript
+
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { WalletProvider } from 'web3-wallets'
+import App from './App'
+
+ReactDOM.render(
+<WalletProvider  >
+    <App />
+</WalletProvider>, document.getElementById('root'))
 
 ```
 
