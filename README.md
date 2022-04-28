@@ -1,18 +1,23 @@
-<p align="center">
-    <a href="https://aws.amazon.com" title="W3 Wallets">
-        <img  height=230px src="https://pbs.twimg.com/profile_images/1473756532827246593/KRgw2UkV_400x400.jpg" alt="W3 Wallets">
+<p align="center" style="border-radius:50%">
+    <a href="https://aws.amazon.com" title="W3 Wallets" style="border-radius:50%">
+        <img  height=230px src="https://open-rpg-images.s3.us-east-2.amazonaws.com/web3blue.jpg" alt="W3 Wallets" style="border-radius:50%" >
     </a>
 </p>
 
 <div align="center">
 
 # Web3 wallets (React.js)
-### Integrate Web3 Wallets into your website with just a few lines of code
+### Integrate Web3 Wallets into your Dapp with just a few lines of code
 
 
-[![JavaScript](https://img.shields.io/badge/JavaScript-%23FFFF00)](https://img.shields.io/badge/JavaScript-%23FFFF00)    [![Node](https://img.shields.io/badge/NodeJS-v14.0.1-brightgreen)](https://img.shields.io/badge/NodeJS-v14.x.x-brightgreen) 
- [![AWS](https://img.shields.io/badge/AWS-Cloud%20provider-orange)](https://img.shields.io/badge/AWS-Cloud%20provider-orange)
-[![Dynamo](https://img.shields.io/badge/DynamoDB-Database-blue)](https://img.shields.io/badge/DynamoDB-Database-blue) [![Lambda](https://img.shields.io/badge/Lambda-service-%20%09%23a26c2f)](https://img.shields.io/badge/Lambda-service-%20%09%23a26c2f)  [![SES](https://img.shields.io/badge/SES-aws--sdk-yellowgreen)](https://img.shields.io/badge/SES-aws--sdk-yellowgreen)
+   [![JavaScript](https://img.shields.io/badge/JavaScript-%23FFFF00)](https://img.shields.io/badge/JavaScript-%23FFFF00)    [![ReactJS](https://img.shields.io/badge/-ReactJS-cyan)](https://img.shields.io/badge/-ReactJS-cyan) 
+   [![MetaMask](https://img.shields.io/badge/Meta%20Mask-wallet-orange)](https://img.shields.io/badge/Meta%20Mask-wallet-orange) 
+   [![Formatic](https://img.shields.io/badge/Formatic-wallet-%236851FF)](https://img.shields.io/badge/Formatic-wallet-%236851FF) 
+   [![Coinbase](https://img.shields.io/badge/Coinbase-wallet-blue)](https://img.shields.io/badge/Coinbase-wallet-blue)
+   [![Walletconnect](https://img.shields.io/badge/Wallet%20connect-wallet-red)](https://img.shields.io/badge/Wallet%20connect-wallet-red)
+   [![Portis](https://img.shields.io/badge/Portis-wallet-%237e33ee)](https://img.shields.io/badge/Portis-wallet-%237e33ee)
+   
+
 </div>
 
 
@@ -26,155 +31,22 @@
 ## Import the module Provider in Index.js
 
 ```javascript
- import {WalletProvider} from 'web3-wallets'
+ import { WalletProvider } from 'web3-wallets'
 ```
 
-## Configure your logger
-
-```javascript
-
-```
-# IMPORTANT :
-
-### Make sure the IAM role has the following permissions enabled on AWS AND in your app.
-(The role you generated your  Access Key  and Secret from)
-
-```yaml
-  iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-        - "logs:*"
-      Resource: "*" 
-    - Effect: "Allow"
-      Action:
-        - "dynamodb:*"
-      Resource: "*"
-    - Effect: "Allow"
-      Action: "ses:ListIdentities"
-      Resource: "*" 
-    - Effect: "Allow"
-      Action: "ses:SendEmail"
-      Resource: "*"
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `tableName`      | `String`| **Required**. The name of the table that will be automatically created to store your logs. Defaults to `"SERVICE-LOGS"`. Must be unique from other table names. |
-| `mailList`       | `Array` | **Optional**. A list of recipient emails that will recieve log alerts |
-| `mailSubject`     | `String` | **Optional**. The email subject to be displayed for recipients when they recieve a log alert. Defaults to `"New AWS Log"`  |
-| `sourceEmail`     | `String` | **Optional**. The sender email used to send the logs.  **Must be a verified email in your AWS account or under a verified Domain** |
-| `notifyOnSeverityLevel`     | `Integer` | **Required**. The severity level a log must have in order to trigger an email alert. Defaults to `10`. (max 10 - min 0) |
-| `serviceName`     | `String` | **Required**. The name of the service you added this package to. This will be used to identify which service the log belongs to in the `SERVICE-LOGS` table |
-| `enableNotifications`     | `Boolean` | **Optional**. Specify if you want email alerts enabled. **Note : If set to `true`, The following fields will be required : `mailList`, and `sourceEmail`** . |
-| `region`     | `String` | **Required** . The AWS region you want this Logger configured for. **Note : Must be the same as the region that the `sourceEmail` is configured for in your AWS account**  |
-| `accessKeyId`     | `String` | **Required** . Your AWS IAM access Key. Not required if you dont have to configure this before using `aws-sdk` in your service  |
-| `secretAccessKey`     | `String` | **Required** . Your AWS IAM secret Key. Not required if you dont have to configure this before using `aws-sdk` in your service  |
-
-
-## Usage
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `message`      | `String`| **Required**. The message you want to log |
-| `severity`       | `Array` | **Optional**. Severity level (max 10 - min 0). **Defaults : `{Log : 1 , Warn : 2 , Error : 3}`** |
-| `details`     | `JSON Object` | **Optional**. Any additional details you may want to add. **Defaults to false**  |
+## Wallet Provider props
+| Parameter | Type                | Description                       |
+| :------- | :------------------- | :--------------------------------  |
+| `allowedWallets`   |  `Array`   | **Optional**. List of wallets you want available in your Dapp : ` metamask , walletconnect , coinbase , formatic , portis `. Defaults to all (excluding portis and formatic **UNLESS** you provided their configurations in `formaticOptions` & `portisOptions` ) |
+| `allowedNetworks`  |  `Array`   | **Optional**. List of networks your Dapp should support (chain ID's). Defaults to `[1,4]` (mainnet & rinkeby) |
+| `formaticOptions`  |  `Object`  | **Required if**.  you want formatic as an option for wallet use. ex : `{key : "<you-api-key>", network : "mainnet"}`  |
+| `portisOptions`    |  `Object`  | **Required if**.  you want portis as an option for wallet use. ex : `{key : "<you-api-key>", network : "mainnet"}`  |
 
 ### Partial example from this [example app](https://github.com/fsobh/Chainlink-External-Initiator-Template/blob/Dev/app.js)
 
 ```javascript
-var express = require('express');
-const serverless = require('serverless-http');
-var app = express();
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-const Logger = require("aws-logging");
 
-Logger.config.update({
-  
-    mailList : [process.env.RECIEVER_EMAIL_1],
-    sourceEmail : process.env.SOURCE_EMAIL,
-    notifyOnSeverityLevel : 5,
-    serviceName : process.env.SERVICE_NAME,
-    enableNotifications : true,
-    region:"us-east-2",
-    accessKeyId : process.env.KEY,
-    secretAccessKey : process.env.SECRET
-
-})
-app.get('/', async function (req, res) {
-
-    try {
-
-        await Logger.log("Health Check ran", 1, {request : {body : JSON.parse(JSON.stringify(req.body))}});
-        res.sendStatus(200);
-        
-    } catch (error) {
-        
-        await Logger.error(error.message,3,
-            {
-                stack : error.stack,
-                error : String(error)
-            });
-        res.send({'error' : error}).sendStatus(500);
-    }
-
-})
-
-module.exports.handler = serverless(app);
 ```
 
 
 
-####  Log
-```javascript
- await Logger.log("Logging data");
- //or
- await Logger.log("Logging data", 1);
- //or
- await Logger.log("Logging data", 1 , {attribute1 : "1", attribute1 : "2", }); 
-```
-
-####  Warn
-```javascript
- await Logger.warn("Warning data");
- //or
- await Logger.warn("Warning data", 2);
- //or
- await Logger.warn("Warning data", 2 , {attribute1 : "1", attribute1 : "2", }); 
-```
-
-####  Error
-```javascript
- await Logger.error("Error data");
- //or
- await Logger.error("Error data", 3);
- //or
- await Logger.error("Error data", 3 , {attribute1 : "1", attribute1 : "2", });  
-```
-
-### Short Methods
-These shorter methods just swap the argument order for details and severity.
-
-####  Log
-```javascript
- await Logger.l("Log data");
- //or
- await Logger.l("Log data with object", {attribute1 : "1", attribute1 : "2", });
- //or
- await Logger.l("Log data with object and sev", {attribute1 : "1", attribute1 : "2", }, 1);  
-```
-####  Warn
-```javascript
- await Logger.w("Warn data");
- //or
- await Logger.w("Warn data with object", {attribute1 : "1", attribute1 : "2", });
- //or
- await Logger.w("Warn data with object and sev", {attribute1 : "1", attribute1 : "2", }, 2);  
-```
-####  Error
-```javascript
- await Logger.e("Error data");
- //or
- await Logger.e("Error data with object", {attribute1 : "1", attribute1 : "2", });
- //or
- await Logger.e("Error data with object and sev", {attribute1 : "1", attribute1 : "2", }, 3);  
-```
