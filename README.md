@@ -76,7 +76,7 @@ ReactDOM.render(
     formaticOptions = {{
 
         key: "formatic-api-key",
-        network : "<network NAME >" /** Heresexamples of networks that formatic support (make sure to include the network ID in allowedNetworks prop as well) https://docs.fortmatic.com/web3-integration/network-configuration */
+        network : "<network NAME >" /** Heres examples of networks that formatic support (make sure to include the network ID in allowedNetworks prop as well) https://docs.fortmatic.com/web3-integration/network-configuration */
 
     }}
 
