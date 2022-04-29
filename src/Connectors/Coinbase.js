@@ -7,8 +7,6 @@ async function listenCoinbaseAccount(ethereum, current,set){
     // Initialize a Web3 object
 try {
 
-
-
  const web3 = new Web3(ethereum)
 
  ethereum.enable().then(async (accounts) => {
@@ -148,10 +146,12 @@ export default async function connectCoinBaseWallet(current,set,disconnect = fal
 
 try {
 
-const APP_NAME = 'My Awesome App'
-const APP_LOGO_URL = 'https://example.com/logo.png'
-const DEFAULT_ETH_JSONRPC_URL = 'https://mainnet.infura.io/v3/29697ff0dc574effbd5f5e104a845ed0'
-const DEFAULT_CHAIN_ID = 1
+
+
+const APP_NAME = current.coinbaseOptions.appName
+const APP_LOGO_URL =  current.coinbaseOptions.logo || 'https://example.com/logo.png'
+const DEFAULT_ETH_JSONRPC_URL = current.coinbaseOptions.jsonrpc
+const DEFAULT_CHAIN_ID = current.coinbaseOptions.defaultChain
 
 // Initialize Coinbase Wallet SDK
  const coinbaseWallet = new CoinbaseWalletSDK({

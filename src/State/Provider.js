@@ -57,6 +57,13 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
                 }
                 break;
               }
+              case 'coinbase': {
+                if(coinbaseOptions && coinbaseOptions.appName && coinbaseOptions.jsonrpc && coinbaseOptions.defaultChain){
+                  otherWalletSettings.coinbase = coinbaseOptions;
+                  selectedWallets.push(found);
+                }
+                break;
+              }
               default: {
                 selectedWallets.push(found);
                 break;
@@ -69,49 +76,58 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
 
         if(!portisOptions || (!portisOptions.key || !portisOptions.network)){
 
-          WalletOptions.pop();
+          const _indexPortis = WalletOptions.map(function(e) { return e.id; }).indexOf('portis');
 
-          if(!formaticOptions || (!formaticOptions.key || !formaticOptions.network))
-              WalletOptions.pop(); 
+          WalletOptions.splice(_indexPortis,1);
+        
         }
-        else{
-
-          if(!formaticOptions || (!formaticOptions.key || !formaticOptions.network)) 
-          {
-            const _indexFormatic = WalletOptions.map(function(e) { return e.id; }).indexOf('formatic');
-            const _indexPortis = WalletOptions.map(function(e) { return e.id; }).indexOf('portis');
-            WalletOptions[_indexFormatic] = WalletOptions[_indexPortis];
-            WalletOptions.pop()
-
-          }
-      }
-
-
          
+        if(!formaticOptions || (!formaticOptions.key || !formaticOptions.network)){
+
+          const _indexFormatic = WalletOptions.map(function(e) { return e.id; }).indexOf('formatic');
+          
+          WalletOptions.splice(_indexFormatic,1);
+        
+        }
+
+        if(!coinbaseOptions ||( !coinbaseOptions.appName || !coinbaseOptions.jsonrpc || !coinbaseOptions.defaultChain)){
+
+          const _indexCoinbase = WalletOptions.map(function(e) { return e.id; }).indexOf('coinbase');
+
+          WalletOptions.splice(_indexCoinbase,1);
+        }
+        
+      
+
         selectedWallets = WalletOptions;
-        //check if portis and formatic creds were provided
+       
       }
   }
   else {
 
     if(!portisOptions || (!portisOptions.key || !portisOptions.network)){
 
-      WalletOptions.pop();
+      const _indexPortis = WalletOptions.map(function(e) { return e.id; }).indexOf('portis');
 
-      if(!formaticOptions || (!formaticOptions.key || !formaticOptions.network))
-          WalletOptions.pop();
-    }
-    else{
-
-      if(!formaticOptions || (!formaticOptions.key || !formaticOptions.network)) 
-      {
+      WalletOptions.splice(_indexPortis,1);
     
-        const _indexFormatic = WalletOptions.map(function(e) { return e.id; }).indexOf('formatic');
-        const _indexPortis = WalletOptions.map(function(e) { return e.id; }).indexOf('portis');
-        WalletOptions[_indexFormatic] = WalletOptions[_indexPortis];
-        WalletOptions.pop()
-      }
-  }
+    }
+     
+    if(!formaticOptions || (!formaticOptions.key || !formaticOptions.network)){
+
+      const _indexFormatic = WalletOptions.map(function(e) { return e.id; }).indexOf('formatic');
+      
+      WalletOptions.splice(_indexFormatic,1);
+    
+    }
+
+    if(!coinbaseOptions ||( !coinbaseOptions.appName || !coinbaseOptions.jsonrpc || !coinbaseOptions.defaultChain)){
+
+      const _indexCoinbase = WalletOptions.map(function(e) { return e.id; }).indexOf('coinbase');
+
+      WalletOptions.splice(_indexCoinbase,1);
+    }
+   
     selectedWallets = WalletOptions;
   }
 
@@ -128,7 +144,7 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
     protocal: false,
     Connector: false,
     allowedNetworks : selectedNetworks,
-    coinbaseOptions : {},
+    coinbaseOptions : otherWalletSettings.coinbase,
     portisOptions   : otherWalletSettings.portis,
     formaticOptions : otherWalletSettings.formatic,
     wallets : selectedWallets,

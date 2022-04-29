@@ -7,9 +7,11 @@ import App from './App'
 ReactDOM.render(
 <WalletProvider  
     allowedWallets={[
-        "metamask" , "walletconnect" , "coinbase" ,
-         "formatic" , //
-          "portis" // 
+        "metamask",
+        "walletconnect",
+        "coinbase",  //
+        "formatic", //
+        "portis"   // 
     ]} 
 
     allowedNetworks={[
@@ -31,6 +33,14 @@ ReactDOM.render(
 
     }}
 
+    coinbaseOptions = {{
+
+        appName: "name of your Dapp",
+        logo : "url to your apps logo", /**Optional */
+        jsonrpc : "< rpc-url >",
+        defaultChain : 1
+    
+    }}
 >
     <App />
 </WalletProvider>, document.getElementById('root'))
