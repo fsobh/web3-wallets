@@ -158,7 +158,7 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
 
 
     //check authentication state
-   if(props.account && props.authenticated && props.Protocal &&
+   if(connectedWallet.account && connectedWallet.isAuthenticated && connectedWallet.protocal &&
      (typeof props.account === 'string' || 
      props.account instanceof String)){
         
@@ -214,7 +214,7 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
             }
             case 'walletconnect' : { 
 
-              if(!props.Connector)
+              if(!connectedWallet.Connector)
                 reject({code : 4044, Message: "Provider not Found, Check your wallet connection or refresh the page & reconnect"})
 
             const web3 = new Web3(props.Connector); 
