@@ -6,7 +6,7 @@ import {
   Formatic,
   Portis
 } from '../assets/index'
-
+import Web3 from "web3";
 export const UserContext = createContext();
 export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, formaticOptions, portisOptions, coinbaseOptions}) => {
 
@@ -159,18 +159,18 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
 
     //check authentication state
    if(connectedWallet.account && connectedWallet.isAuthenticated && connectedWallet.protocal &&
-     (typeof props.account === 'string' || 
-     props.account instanceof String)){
+     (typeof connectedWallet.account === 'string' || 
+     connectedWallet.account instanceof String)){
         
 
-        switch(props.Protocal){
+        switch(connectedWallet.protocal){
 
             case 'metamask' : {
 
               if (!window || !window.ethereum)
                 reject({Message : `No Injection Found` , code : 400})
 
-                const web3 = new Web3(props.Connector);
+                const web3 = new Web3(connectedWallet.Connector);
                 
                 
 
@@ -179,7 +179,7 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
               
                 const transactionParameters = {
                   to: AddressHolder.Factory.Address, // Required except during contract publications.
-                  from: props.account, // must match user's active address.
+                  from: connectedWallet.account, // must match user's active address.
                   
                   value: parseInt(Web3.utils.toWei("0.05", 'ether')).toString(16), // MAKE SURE TO CONVERT THIS TO HEX --- Only required to send ether to the recipient from the initiating external account.
                   data: web3.eth.abi.encodeFunctionCall(    
@@ -197,7 +197,7 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
                       "type": "function"
                     },[props.account]
                 ),
-                  chainId: `0x${parseInt(props.network)}`, // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+                  chainId: `0x${parseInt(connectedWallet.selectedNetwork)}`, // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
                 };
 
  
@@ -217,7 +217,7 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
               if(!connectedWallet.Connector)
                 reject({code : 4044, Message: "Provider not Found, Check your wallet connection or refresh the page & reconnect"})
 
-            const web3 = new Web3(props.Connector); 
+            const web3 = new Web3(connectedWallet.Connector); 
 
             if (!web3)
               reject({Message : `Web3 Error` , code : 400})
@@ -229,7 +229,7 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
               params: [
                 {
                   to: AddressHolder.Factory.Address, // Required except during contract publications.
-                  from: props.account, // must match user's active address. 
+                  from: connectedWallet.account, // must match user's active address. 
                   value: Web3.utils.toWei("0.05", 'ether'), // MAKE SURE TO CONVERT THIS TO HEX --- Only required to send ether to the recipient from the initiating external account.
                   
                   data: web3.eth.abi.encodeFunctionCall(    
@@ -253,7 +253,7 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
 
               // Send transaction
               
-                props.Connector.sendCustomRequest(customRequest)
+                connectedWallet.Connector.sendCustomRequest(customRequest)
                 .then((result) => {
                   // Returns transaction id (hash)
                   resolve(result) 
@@ -266,62 +266,18 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
 
               break
             }
-            case 'trezor' : {
-
-              try {
-                const web3 = new Web3(props.Connector); 
-
-                if (!web3)
-                  reject({Message : `Web3 Error` , code : 400})
-
-              console.log(props)
-              const rawTx = {
-                to: "0x234094098889dAa77DE94E46af7382ba18e14C67",
-                value: parseInt(Web3.utils.toWei("0.05", 'ether')).toString(16),
-                data: web3.eth.abi.encodeFunctionCall(    
-                  {
-                    "inputs": [
-                      {
-                        "internalType": "address",
-                        "name": "to",
-                        "type": "address"
-                      }
-                    ],
-                    "name": "Mint",
-                    "outputs": [],
-                    "stateMutability": "payable",
-                    "type": "function"
-                  },[props.account]
-              ),
-                chainId: 1,
-                nonce: web3.utils.toHex(props.trezorNonce),
-                gasLimit: "0x5208",
-                gasPrice: web3.utils.toHex(web3.eth.getGasPrice()),
-              
-                }
-
-                props.Connector.ethereumSignTransaction({
-                  path: "m/44'/60'/0'",
-                  transaction: rawTx
-              });
-            } catch (error) {
-              console.error(error)
-            }
-
-                break
-            }
             case 'portis' : {
 
-              if(!props.Connector )
+              if(!connectedWallet.Connector )
                   reject({code : 4044, Message: "Provider not Found, Check your wallet connection or refresh the page & reconnect"})
-              const web3 = new Web3(props.Connector); 
+              const web3 = new Web3(connectedWallet.Connector); 
 
               if (!web3)
                   reject({Message : `Web3 Error` , code : 400})
 
               const rawTx = {
                   to: AddressHolder.Factory.Address,
-                  from: props.account, 
+                  from: connectedWallet.account, 
                   value: parseInt(Web3.utils.toWei("0.05", 'ether')).toString(16), 
                   data: web3.eth.abi.encodeFunctionCall(    
                     {
@@ -342,7 +298,7 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
 
                   
                     
-                     await props.Connector.currentProvider.send("eth_sendTransaction", [
+                     await connectedWallet.Connector.currentProvider.send("eth_sendTransaction", [
                       rawTx
                     ]).then((result)=>{
 
@@ -359,17 +315,17 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
             case 'coinbase' : {
 
 
-              if(!props.Connector )
+              if(!connectedWallet.Connector )
               reject({code : 4044, Message: "Provider not Found, Check your wallet connection or refresh the page & reconnect"})
 
-              const web3 = new Web3(props.Connector); 
+              const web3 = new Web3(connectedWallet.Connector); 
 
               if (!web3)
                   reject({Message : `Web3 Error` , code : 400})
 
               const rawTx = {
                   to: AddressHolder.Factory.Address,
-                  from: props.account, 
+                  from: connectedWallet.account, 
                   value: parseInt(Web3.utils.toWei("0.05", 'ether')).toString(16), 
                   data: web3.eth.abi.encodeFunctionCall(    
                     {
@@ -388,7 +344,7 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
                 )
                   }
 
-                     await props.Connector.send("eth_sendTransaction", [
+                     await connectedWallet.Connector.send("eth_sendTransaction", [
                       rawTx
                     ]).then((result)=>{
 
@@ -409,17 +365,17 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
             }
             case 'formatic' : {
 
-              if(!props.Connector )
+              if(!connectedWallet.Connector )
               reject({code : 4044, Message: "Provider not Found, Check your wallet connection or refresh the page & reconnect"})
           
-          const web3 = new Web3(props.Connector); 
+          const web3 = new Web3(connectedWallet.Connector); 
 
           if (!web3)
                 reject({Message : `Web3 Error` , code : 400})
 
           const rawTx = {
               to: AddressHolder.Factory.Address,
-              from: props.account, 
+              from: connectedWallet.account, 
               value: Web3.utils.toWei("0.05", 'ether'), 
               data: web3.eth.abi.encodeFunctionCall(    
                 {
@@ -440,7 +396,7 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
 
               
                 
-                 await props.Connector.eth.sendTransaction(rawTx,(error,txnHash)=>
+                 await connectedWallet.Connector.eth.sendTransaction(rawTx,(error,txnHash)=>
                  {
                   if (error) 
                     reject({code :5503 , Message : `Rejected : ${error}`})
