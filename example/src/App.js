@@ -1,15 +1,19 @@
 import React from 'react'
-
-import  {WalletButton, WalletContext}  from 'web3-wallets'
+import { BrowserRouter,Route, Routes } from "react-router-dom";
 import 'web3-wallets/dist/index.css'
-
+import Home from './Pages/Home';
+import Account from './Pages/Account';
+import Network from './Pages/Network';
 const App = () => {
 
-  const {connectedWallet, commitTransaction} = React.useContext(WalletContext)
-
-  console.log(connectedWallet.Connector)
-  
-  return <div ><WalletButton /> <br/> <button onClick={async ()=>await commitTransaction("0x2cbA00e6e4F6A5e6A0a2DBeDdBd56312994D36C9","0.05")}> transact </button></div>
+  return ( 
+  <BrowserRouter> 
+    <Routes>
+      <Route path="/" element={<Home/>} />
+      <Route path="net" element={<Network/>} />
+      <Route path="acc" element={<Account/>} />
+    </Routes>
+  </BrowserRouter>)
 }
 
 export default App
