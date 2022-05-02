@@ -151,52 +151,46 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
     
   });
 
-  const commitTransaction = (to, amount, functionABI, functionParameters) =>
+  const commitTransaction = (to, amount, functionABI=false, functionParameters = []) =>
 
-  new Promise(async (resolve, reject) => {
+   new Promise(async (resolve, reject) => {
 
 
+    try {
 
-    //check authentication state
    if(connectedWallet.account && connectedWallet.isAuthenticated && connectedWallet.protocal &&
      (typeof connectedWallet.account === 'string' || 
      connectedWallet.account instanceof String)){
         
+        if(!connectedWallet.isAuthenticated)
+          reject({Message : `Not authenticated` , code : 400})
+
+          if(functionABI)
+            if (functionABI.inputs && Array.isArray(functionABI.inputs))
+                if(functionABI.inputs.length !== functionParameters.length)
+                  reject({Message : `Number of params doesnt match the input ammounts in the abi` , code : 403})
+
 
         switch(connectedWallet.protocal){
 
             case 'metamask' : {
 
+              
               if (!window || !window.ethereum)
                 reject({Message : `No Injection Found` , code : 400})
 
                 const web3 = new Web3(connectedWallet.Connector);
                 
-                
-
                 if (!web3)
                   reject({Message : `Web3 Error` , code : 400})
               
+              
                 const transactionParameters = {
-                  to: AddressHolder.Factory.Address, // Required except during contract publications.
-                  from: connectedWallet.account, // must match user's active address.
-                  
-                  value: parseInt(Web3.utils.toWei("0.05", 'ether')).toString(16), // MAKE SURE TO CONVERT THIS TO HEX --- Only required to send ether to the recipient from the initiating external account.
-                  data: web3.eth.abi.encodeFunctionCall(    
-                    {
-                      "inputs": [
-                        {
-                          "internalType": "address",
-                          "name": "to",
-                          "type": "address"
-                        }
-                      ],
-                      "name": "Mint",
-                      "outputs": [],
-                      "stateMutability": "payable",
-                      "type": "function"
-                    },[props.account]
-                ),
+                  to: to, 
+                  from: connectedWallet.account, // must match user's active address.     
+                  value: parseInt(Web3.utils.toWei(amount, 'ether')).toString(16), // MAKE SURE TO CONVERT THIS TO HEX --- Only required to send ether to the recipient from the initiating external account.
+                  data: functionABI ? web3.eth.abi.encodeFunctionCall(    
+                    functionABI,functionParameters):'',
                   chainId: `0x${parseInt(connectedWallet.selectedNetwork)}`, // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
                 };
 
@@ -228,25 +222,13 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
               method: "eth_sendTransaction",
               params: [
                 {
-                  to: AddressHolder.Factory.Address, // Required except during contract publications.
+                  to: to, // Required except during contract publications.
                   from: connectedWallet.account, // must match user's active address. 
-                  value: Web3.utils.toWei("0.05", 'ether'), // MAKE SURE TO CONVERT THIS TO HEX --- Only required to send ether to the recipient from the initiating external account.
+                  value: Web3.utils.toWei(amount, 'ether'), // MAKE SURE TO CONVERT THIS TO HEX --- Only required to send ether to the recipient from the initiating external account.
                   
-                  data: web3.eth.abi.encodeFunctionCall(    
-                    {
-                      "inputs": [
-                        {
-                          "internalType": "address",
-                          "name": "to",
-                          "type": "address"
-                        }
-                      ],
-                      "name": "Mint",
-                      "outputs": [],
-                      "stateMutability": "payable",
-                      "type": "function"
-                    },[props.account]
-                ),
+                  data: functionABI ?web3.eth.abi.encodeFunctionCall(    
+                    functionABI,functionParameters
+                ) : '',
                 } 
               ],
             };
@@ -276,24 +258,12 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
                   reject({Message : `Web3 Error` , code : 400})
 
               const rawTx = {
-                  to: AddressHolder.Factory.Address,
+                  to: to,
                   from: connectedWallet.account, 
-                  value: parseInt(Web3.utils.toWei("0.05", 'ether')).toString(16), 
-                  data: web3.eth.abi.encodeFunctionCall(    
-                    {
-                      "inputs": [
-                        {
-                          "internalType": "address",
-                          "name": "to",
-                          "type": "address"
-                        }
-                      ],
-                      "name": "Mint",
-                      "outputs": [],
-                      "stateMutability": "payable",
-                      "type": "function"
-                    },[props.account]
-                )
+                  value: parseInt(Web3.utils.toWei(amount, 'ether')).toString(16), 
+                  data: functionABI ? web3.eth.abi.encodeFunctionCall(    
+                    functionABI,functionParameters
+                ) :''
                   }
 
                   
@@ -324,24 +294,12 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
                   reject({Message : `Web3 Error` , code : 400})
 
               const rawTx = {
-                  to: AddressHolder.Factory.Address,
+                  to: to,
                   from: connectedWallet.account, 
-                  value: parseInt(Web3.utils.toWei("0.05", 'ether')).toString(16), 
-                  data: web3.eth.abi.encodeFunctionCall(    
-                    {
-                      "inputs": [
-                        {
-                          "internalType": "address",
-                          "name": "to",
-                          "type": "address"
-                        }
-                      ],
-                      "name": "Mint",
-                      "outputs": [],
-                      "stateMutability": "payable",
-                      "type": "function"
-                    },[props.account]
-                )
+                  value: parseInt(Web3.utils.toWei(amount, 'ether')).toString(16), 
+                  data: functionABI ? web3.eth.abi.encodeFunctionCall(    
+                    functionABI,functionParameters
+                ) : ''
                   }
 
                      await connectedWallet.Connector.send("eth_sendTransaction", [
@@ -374,29 +332,15 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
                 reject({Message : `Web3 Error` , code : 400})
 
           const rawTx = {
-              to: AddressHolder.Factory.Address,
+              to: to,
               from: connectedWallet.account, 
-              value: Web3.utils.toWei("0.05", 'ether'), 
-              data: web3.eth.abi.encodeFunctionCall(    
-                {
-                  "inputs": [
-                    {
-                      "internalType": "address",
-                      "name": "to",
-                      "type": "address"
-                    }
-                  ],
-                  "name": "Mint",
-                  "outputs": [],
-                  "stateMutability": "payable",
-                  "type": "function"
-                },[props.account]
-                )
+              value: Web3.utils.toWei(amount, 'ether'), 
+              data: functionABI ? web3.eth.abi.encodeFunctionCall(    
+                functionABI ,functionParameters
+                ) : ''
             }
 
-              
-                
-                 await connectedWallet.Connector.eth.sendTransaction(rawTx,(error,txnHash)=>
+                await connectedWallet.Connector.eth.sendTransaction(rawTx,(error,txnHash)=>
                  {
                   if (error) 
                     reject({code :5503 , Message : `Rejected : ${error}`})
@@ -417,13 +361,15 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
 
 
     }
-
+  } catch (error) {
+      console.log(error)
+  }
   });
 
 
 
   return(
-    <UserContext.Provider value={[connectedWallet, setWallet,commitTransaction]}>
+    <UserContext.Provider value={{connectedWallet, setWallet,commitTransaction}}>
       {children}
     </UserContext.Provider>
   )

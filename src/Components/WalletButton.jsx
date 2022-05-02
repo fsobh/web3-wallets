@@ -22,7 +22,7 @@ import  fetchNetworkNameByID  from '../Utils';
 
 export const WalletButton = () => {
 
-  const [connectedWallet, setWallet] = React.useContext(UserContext);
+  const {connectedWallet, setWallet} = React.useContext(UserContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [generalModalSettings, setGMSettings] = useState(false)
   const [networkName, setNetworkName] = useState('')
