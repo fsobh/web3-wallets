@@ -151,7 +151,7 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
     
   });
 
-  const commitTransaction = () =>
+  const commitTransaction = (to, amount, functionABI, functionParameters) =>
 
   new Promise(async (resolve, reject) => {
 
@@ -247,7 +247,7 @@ export const UserInfoProvider = ({children, allowedWallets,allowedNetworks, form
                       "type": "function"
                     },[props.account]
                 ),
-                }
+                } 
               ],
             };
 
