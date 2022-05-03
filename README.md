@@ -8,7 +8,7 @@
 
 # Web3 wallets (React.js)
 ### Integrate Web3 Wallets into your Dapp with just a few lines of code
-
+#### Wallet state remains consistant throughout Dapp navigation
 
    [![JavaScript](https://img.shields.io/badge/JavaScript-%23FFFF00)](https://img.shields.io/badge/JavaScript-%23FFFF00)    [![ReactJS](https://img.shields.io/badge/-ReactJS-cyan)](https://img.shields.io/badge/-ReactJS-cyan) 
    [![MetaMask](https://img.shields.io/badge/Meta%20Mask-wallet-orange)](https://img.shields.io/badge/Meta%20Mask-wallet-orange) 
@@ -37,15 +37,16 @@
 ## Wallet Provider props
 | Parameter | Type                | Description                       |
 | :------- | :------------------- | :--------------------------------  |
-| `allowedWallets`   |  `Array`   | **Optional**. List of wallets you want available in your Dapp : ` metamask , walletconnect , coinbase , formatic , portis `. Defaults to all (excluding portis and formatic **UNLESS** you provided their configurations in `formaticOptions` & `portisOptions` ) |
+| `allowedWallets`   |  `Array`   | **Optional**. List of wallets you want available in your Dapp : ` metamask , walletconnect , coinbase , formatic , portis `. Defaults to all (excluding portis, formatic, and coinbase **UNLESS** you provided their configurations in `formaticOptions` & `portisOptions` ) |
 | `allowedNetworks`  |  `Array`   | **Optional**. List of networks your Dapp should support (chain ID's). Defaults to `[1,4]` (mainnet & rinkeby) |
 | `formaticOptions`  |  `Object`  | **Required if**.  you want formatic as an option for wallet use. ex : `{key : "<you-api-key>", network : "mainnet"}`  |
 | `portisOptions`    |  `Object`  | **Required if**.  you want portis as an option for wallet use. ex : `{key : "<you-api-key>", network : "mainnet"}`  |
 | `coinbaseOptions`    |  `Object`  | **Required if**.  you want coinbase as an option for wallet use. ex : `{ appName: "name of your Dapp", logo : "url to your apps logo", jsonrpc : "<-rpc-url->", defaultChain : 1}`  |
 
-### Example
+## Example
 
 ```javascript
+//index.js
 import {WalletProvider} from 'web3-wallets'
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -56,9 +57,9 @@ ReactDOM.render(
     allowedWallets={[
         "metamask",
         "walletconnect",
-        "coinbase",  //
-        "formatic", //
-        "portis"   // 
+        "coinbase",  
+        "formatic", 
+        "portis"   
     ]} 
 
     allowedNetworks={[
@@ -93,6 +94,63 @@ ReactDOM.render(
 </WalletProvider>, document.getElementById('root'))
 
 ```
+## App.js
 
+```javascript
+//App.js
+import React from 'react'
+import { BrowserRouter,Route, Routes } from "react-router-dom";
+import Home from './Pages/Home';
+import Account from './Pages/Account';
+import Network from './Pages/Network';
+
+const App = () => {
+
+  return ( 
+  <BrowserRouter> 
+    <Routes>
+      <Route path="/" element={<Home/>} />
+      <Route path="net" element={<Network/>} />
+      <Route path="acc" element={<Account/>} />
+    </Routes>
+  </BrowserRouter>);
+}
+
+export default App;
+
+```
+## Wallet Button usage & creating a transaction
+
+### ```commitTransaction(to, amount, functionABI=false, functionParameters = [])``` 
+| Parameter | Type                | Description                       |
+| :------- | :------------------- | :--------------------------------  |
+| `to`  |  `String`   | **Required**.  |
+| `amount`  |  `String`  | **Required**.  |
+| `functionABI`  |  `Object`  | **Required if**. |
+| `functionParameters`  |  `Array`  | **Required if**. |
+
+```javascript
+//Home.js
+import React from 'react'
+import  {WalletButton,WalletContext}  from 'web3-wallets'
+import 'web3-wallets/dist/index.css'
+import Nav from '../Components/Nav'
+const Home = () => {
+  const { commitTransaction} = React.useContext(WalletContext)
+
+  return( 
+  <div>
+    <Nav/>
+      <br/>
+      <WalletButton/>
+      <br/>
+      <button onClick={async ()=> await commitTransaction("0x642dC956a520BbF8A76fc1ec70B2515a8f0A4f89","0.05")}> 
+        transact 
+      </button>
+  </div>
+   );
+}
+export default Home;
+```
 
 
