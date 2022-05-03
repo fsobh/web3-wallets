@@ -176,7 +176,7 @@ export const WalletButton = () => {
                     <img className={styles.walicon} src={ConnectWalletIconswallet} height="35px" width="35px" />
                     : <img className={styles.straight} src={ConnectWalletIconswallet} />
       }
-                        <div className={styles.pricingItempricing}> {connectedWallet.account} </div>
+                        <div className={styles.pricingItem2}> {connectedWallet.account.substring(0, 13)}...{connectedWallet.account.substring(connectedWallet.account.length - 13, connectedWallet.account.length)} </div>
               </div>
 
               <div className={styles.accountInfoheader} >

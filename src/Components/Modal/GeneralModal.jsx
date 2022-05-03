@@ -13,6 +13,7 @@ const  GeneralModalContent = ({ children, open , onClose, text= "Loading, Please
  
 
     return (
+        <div className={styles.modalOverlay} style={{ display: open ? "inherit" : "none" }}>
         <div className={styles.modal}
             role="dialog"
             aria-labelledby="modal_label"
@@ -32,6 +33,7 @@ const  GeneralModalContent = ({ children, open , onClose, text= "Loading, Please
                 </div>  
                 {children}
             </div>
+        </div>
         </div>
     )
 }

@@ -13,6 +13,7 @@ const ModalContent = ({ children, open = false, onClose , account}) => {
     useOnClickOutside(ref, onClose);
 
     return (
+        <div className={styles.modalOverlay} aria-modal="true"  style={{ display: open ? "inherit" : "none" }}>
         <div className={styles.modal}
             role="dialog"
             aria-labelledby="modal_label"
@@ -34,6 +35,7 @@ const ModalContent = ({ children, open = false, onClose , account}) => {
 
                 {children}
             </div>
+        </div>
         </div>
     )
 }

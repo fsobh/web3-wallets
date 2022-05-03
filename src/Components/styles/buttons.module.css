@@ -54,7 +54,7 @@
   margin-right: 10px;
  
 }
-.pricingItem , .accountInfoheader  {
+.pricingItem2 ,.pricingItem , .accountInfoheader  {
   display: inline;
   font-size: 16px;
   position: relative;
@@ -66,7 +66,7 @@
   grid-template-columns: max-content  max-content;
   width : 100%;
   border-radius: 7px;
-  
+  word-wrap: break-word;
   cursor: pointer;
   text-align: center;
   align-items: center;
@@ -90,6 +90,9 @@
   color: #ffffff;
 }
 .pricingItem:hover {
+  background-color: rgba(255, 255, 255, 0.185);
+}
+.pricingItem2 {
   background-color: rgba(255, 255, 255, 0.185);
 }
 .bord {
