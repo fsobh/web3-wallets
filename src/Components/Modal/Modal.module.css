@@ -1,4 +1,3 @@
-
 .modalOverlay {
   
   position: fixed;
@@ -10,39 +9,68 @@
   box-sizing: border-box;
   align-items: center;
   justify-content: center;
+  z-index: 1120;
   
-  
+}
+.logo {
+     
+  height: 35px;
+  width: 35px;
+  margin-left: 0.8vw;
+  vertical-align: middle;
 }
 .modal {
     
-    position: relative;
-    -ms-grid-columns: max-content;
-    -ms-template-columns: max-content;
+  
+    
     justify-content: center;
     align-items: center;
-    align-self: center;
-    width: auto;
+   vertical-align: middle;
+    width: 50%;
     height: 100%;
-    top : 10%;
-  margin-left: 5%;
-  margin-right: 5%; 
+ 
     
     
     
+}
+.disconnectButton  {
+ align-self: center;
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: sans-serif;
+  cursor: pointer;
+  
+  padding: 10px;
+  min-width: 100px;
+  border: 0px;
+  -webkit-transition: background-color 100ms linear;
+  -ms-transition: background-color 100ms linear;
+   transition: background-color 100ms linear;
+  background: #e74c3c;
+  color: #ffffff;
 }
 .modal__content {
     position: relative;
     background-color: rgb(37, 36, 36);
-    padding: 0.9em;
+    padding: 0.8em;
     border-radius: 15px;
     text-align: center;
     align-items: center;
     justify-content: center;
+    border: 3px solid white;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    transform: translate(-50%, -50%);
 }
 .close {
+    
     color: red;
+    font-size: 100px;
     float: right;
-    font-size: 50px; 
+    
+    
 }
 .bord {
     width: 80%;
@@ -55,51 +83,20 @@
 .close:focus {
   color: rgb(255, 0, 0);
   text-decoration: none;
-  cursor: pointer;
-}
-.gridcontainer {
 
-  -ms-grid: grid;
-  display: grid;
-  grid-template-columns:   50% 50%;
-  -ms-grid-columns : 50% 50%;
-  width : max-content;
-    
-     
-      
+  
 }
-.griditemstartnon {
-    
-      align-items: center;
-      font-size: 17px;
-      color: white;
-      display: inline;
-      cursor: pointer;
-      vertical-align: middle;
-      float: center;
-}
-.griditemcenter {
-     
 
-      margin-right: 8px;
-      font-size: 17px;
-      color: white;
-      
-}
 .daddy {
     align-items: center;
     font-size: 21px;
+    display: block;
     font-weight: bold;
     color: white;
+    justify-content: center;
    
 }
-.logo {
-     
-      height: 35px;
-      width: 35px;
-      margin-left: 0.8vw;
-      vertical-align: middle;
-}
+
 .ldsdualring {
     display: inline-block;
     width: 80px;

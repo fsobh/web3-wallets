@@ -19,17 +19,18 @@ const  GeneralModalContent = ({ children, open , onClose, text= "Loading, Please
             aria-labelledby="modal_label"
             aria-describedby="modal_description"
             aria-modal="true"
+           
             style={{ display: open ? "inherit" : "none" }}>
             
             <div className={styles.modal__content} >
 
                 <div className={styles.daddy}>
-                {type === 'error' ? <span className={styles.close}>&times;</span>  : <div className={styles.ldsdualring}/> }
+                {type === 'error' ? <span className={styles.close}>&times;</span>  : type === 'success' ? <span className={styles.succy}> &#10004;</span> : <div className={styles.ldsdualring}/> }
                 
                 <br/>
                     <p>{text}</p>
                 <br/>
-                {type === 'error' ? <button className={styles.disconnectButton} onClick={onClose}>Dismiss</button>  : null }
+                {type === 'error' || type === 'success' ? <button className={styles.disconnectButton} onClick={onClose}>Dismiss</button>  : null }
                 </div>  
                 {children}
             </div>

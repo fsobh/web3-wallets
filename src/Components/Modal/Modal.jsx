@@ -13,28 +13,26 @@ const ModalContent = ({ children, open = false, onClose , account}) => {
     useOnClickOutside(ref, onClose);
 
     return (
-        <div className={styles.modalOverlay} aria-modal="true"  style={{ display: open ? "inherit" : "none" }}>
+        <div className={styles.modalOverlay} style={{ display: open ? "inherit" : "none" }}>
         <div className={styles.modal}
             role="dialog"
             aria-labelledby="modal_label"
             aria-describedby="modal_description"
-            aria-modal="true"
-            style={{ display: open ? "inherit" : "none" }}
-        >
+            aria-modal="true">
             
             <div className={styles.modal__content} ref={ref}>
 
 
 
-            <div className={styles.daddy}>
-               {!account ? `Connect Wallet` : `Connected Wallet`}
-                <img className={styles.logo}  src={ConnectWalletIconswallet}/>
-                <span onClick={onClose} className={styles.close}>&times;</span>  
-                <hr className={styles.bord}/>
-            </div>  
+<div className={styles.daddy}>
+   {!account ? `Connect Wallet` : `Connected Wallet`}
+    <img className={styles.logo}  src={ConnectWalletIconswallet}/>
+    <span onClick={onClose} className={styles.close}>&times;</span>  
+    <hr className={styles.bord}/>
+</div>  
 
-                {children}
-            </div>
+    {children}
+</div>
         </div>
         </div>
     )
