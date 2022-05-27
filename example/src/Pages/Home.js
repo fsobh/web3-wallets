@@ -6,7 +6,7 @@ const Home = () => {
   const { commitTransaction} = React.useContext(WalletContext)
 
   return( 
-  <div>
+  <div style={{backgroundColor : "darkgrey", height: "100vh"}}>
     <Nav/>
       <br/>
       <WalletButton/>
