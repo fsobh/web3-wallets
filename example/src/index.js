@@ -4,8 +4,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 
-// TODO: Implement transactions based off this : https://github.com/superior-programmers/OpenRPG/blob/prod/Frontend/src/utils/commitTransaction.js
-
 ReactDOM.render(
 <WalletProvider  
     allowedWallets={[
