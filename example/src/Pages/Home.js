@@ -1,6 +1,6 @@
 import React from 'react'
-import  {WalletButton,WalletContext}  from 'web3-wallets'
-import 'web3-wallets/dist/index.css'
+import  {WalletButton,WalletContext}  from 'web3-wallets-react'
+import 'web3-wallets-react/dist/index.css'
 import Nav from '../Components/Nav'
 const Home = () => {
   const { commitTransaction} = React.useContext(WalletContext)
