@@ -25,13 +25,13 @@
 ####  Install the Package
 
 ```bash
-  npm install web3-wallets
+  npm install web3-wallets-react
 ```
 
 ## Import the module Provider in Index.js
 
 ```javascript
- import { WalletProvider } from 'web3-wallets'
+ import { WalletProvider } from 'web3-wallets-react'
 ```
 
 ## Wallet Provider props
@@ -133,7 +133,7 @@ export default App;
 //Home.js 
 import React from 'react'
 import  {WalletButton,WalletContext}  from 'web3-wallets-react'
-import 'web3-wallets/dist/index.css'
+import 'web3-wallets-react/dist/index.css'
 import Nav from '../Components/Nav'
 const Home = () => {
   const { commitTransaction} = React.useContext(WalletContext)
@@ -202,7 +202,7 @@ export default Home;
 
 import React from 'react'
 import  {WalletContext}  from 'web3-wallets-react'
-import 'web3-wallets/dist/index.css'
+import 'web3-wallets-react/dist/index.css'
 const Account = () => {
   const {connectedWallet} = React.useContext(WalletContext)
 

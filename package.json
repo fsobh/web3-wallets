@@ -1,6 +1,7 @@
 {
   "name": "web3-wallets-react",
-  "version": "1.2.6",
+  "version": "1.2.8",
+  "license": "MIT",
   "description": "A react package with prebuilt components to connect web3 wallets to your website. The state of the connected wallet remains through out navigation",
    "repository": {
     "type": "git",
