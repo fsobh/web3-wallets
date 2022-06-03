@@ -111,18 +111,25 @@ async function listenMMAccount(Ethereum, current,set) {
   } catch (error) {
     console.log(error)
   }
-}
 
+}
+var popup;
 export default async function connectMetaMask(current,set, setError, close, disconnect = false) {
     try {
 
       
-      if(disconnect && window.ethereum){
-        const web3 = new Web3(window.ethereum);
-
-        web3.eth.close()
+      if(disconnect && window.ethereum)
+        if (popup && !popup.closed) 
+          popup.focus();
+        else 
+          popup = window.open("https://metamask.zendesk.com/hc/en-us/articles/360059535551-Disconnect-wallet-from-a-dapp","_blank",
+                              "popup,width=800,height=750,screenX=500,screenY=100");
+         
      
-      }
+
+
+
+       
         
 
       const Ethereum = await getWeb3();

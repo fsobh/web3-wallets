@@ -24,13 +24,20 @@ const ModalContent = ({ children, open = false, onClose , account}) => {
 
 
 
-<div className={styles.daddy}>
+<div className={styles.headerContainer}>
+<div className={styles.headerItem}/>
+    <div className={styles.headerItem}>
    {!account ? `Connect Wallet` : `Connected Wallet`}
-    <img className={styles.logo}  src={ConnectWalletIconswallet}/>
-    <span onClick={onClose} className={styles.close}>&times;</span>  
-    <hr className={styles.bord}/>
+    <img className={styles.logo }  src={ConnectWalletIconswallet}/>
+    </div>
+
+    <div className={styles.headerItem}>
+        <span onClick={onClose} className={styles.close}>&times;</span>  
+    </div>
+
 </div>  
 
+<hr className={styles.bord}/>
     {children}
 </div>
         </div>

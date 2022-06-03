@@ -20,22 +20,17 @@
   vertical-align: middle;
 }
 .modal {
-    
-  
-    
+
     justify-content: center;
     align-items: center;
-   vertical-align: middle;
+    vertical-align: middle;
     width: 50%;
     height: 100%;
  
-    
-    
-    
 }
+
 .disconnectButton  {
  align-self: center;
-  appearance: none;
   -webkit-appearance: none;
   font-family: sans-serif;
   cursor: pointer;
@@ -67,8 +62,8 @@
 .close {
     
     color: red;
-    font-size: 100px;
     float: right;
+    cursor: pointer;
     
     
 }
@@ -77,6 +72,7 @@
     background-color: white;
     border-radius: 15px;
     height : 5px;
+    margin-top: 20px;
     
   }
 .close:hover,
@@ -87,15 +83,26 @@
   
 }
 
-.daddy {
-    align-items: center;
-    font-size: 21px;
-    display: block;
-    font-weight: bold;
-    color: white;
-    justify-content: center;
-   
+.headerContainer {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  
+  
 }
+.headerItem {
+ 
+ 
+  align-items: center;
+  font-size: 21px;
+ 
+  font-weight: bold;
+  color: white;
+  justify-content: center;
+  font-size: 30px;
+  text-align: center;
+}
+
+
 
 .ldsdualring {
     display: inline-block;
