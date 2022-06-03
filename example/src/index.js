@@ -1,5 +1,5 @@
 import './index.css'
-import {WalletProvider} from 'web3-wallets'
+import {WalletProvider} from 'web3-wallets-react'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'

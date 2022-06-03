@@ -1,10 +1,22 @@
 {
-  "name": "web3-wallets",
-  "version": "1.0.0",
-  "description": "Web3-wallets",
-  "author": "fsobh",
-  "license": "MIT",
-  "repository": "fsobh/web3-wallets",
+  "name": "web3-wallets-react",
+  "version": "1.2.6",
+  "description": "A react package with prebuilt components to connect web3 wallets to your website. The state of the connected wallet remains through out navigation",
+   "repository": {
+    "type": "git",
+    "url": "https://github.com/fsobh/aws-logging.git"
+  },
+  
+ 
+  "keywords": ["web3", "crypto", "wallets", "react", "Dapp"],
+  "author": "Fadel Sobh fsobh15@icloud.com (https://fadel.link/)",
+  "contributors": [
+    {
+    "name" : "Fadel Sobh",
+    "email" : "fsobh15@icloud.com",
+    "url" : "https://fadel.link/"
+    }
+],
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.js",
