@@ -1,5 +1,5 @@
 .gridcontainer {
-  margin: 100px;
+  
     display: grid;
     grid-template-columns: min-content min-content min-content;
     border: 3px solid black;
