@@ -28,6 +28,15 @@
   npm install web3-wallets-react
 ```
 
+
+> **Warning**
+> Incase you encounter an issue with webpack : 
+>> 1. Change the version of react-scripts in package.json to ```"react-scripts": "4.0.3"```
+>> 2. Run ```rm -rf node_modules```
+>> 3. Run ```rm -f package-lock.json```
+>> 4. Run ```npm install```
+
+
 ## Import the module Provider in Index.js
 
 ```javascript
